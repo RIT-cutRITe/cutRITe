@@ -15,7 +15,7 @@ jobs:
       - name: Lint most recent commit
         run: |
           wget https://github.com/conventionalcommit/commitlint/releases/download/v0.12.0/commitlint_v0.12.0_linux_386.tar.gz
-          tar -xf commitlint_v0.12.0_linux_386.tar.gz
+          tar -vxf commitlint_v0.12.0_linux_386.tar.gz
           mv ./commitlint_v0.12.0_linux_386/commitlint ~/.local/bin/commitlint
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
