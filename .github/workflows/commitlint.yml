@@ -21,11 +21,11 @@ jobs:
           echo "Getting commitlint with wget"
           wget https://github.com/conventionalcommit/commitlint/releases/download/v0.12.0/commitlint_v0.12.0_linux_386.tar.gz
           echo "Extracting and Moving commitlint binary to ~/.local/bin"
-          tar -vxf commitlint_v0.12.0_linux_386.tar.gz
+          tar -xf commitlint_v0.12.0_linux_386.tar.gz
           mkdir -p ~/.local/bin
           mv ./commitlint ~/.local/bin/commitlint
-          echo "Adding /.local/bin to PATH"
+          echo "Adding ~/.local/bin to PATH"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           echo "Linting commit: "
-          echo ${{ github.event.head_commit.message }}
-          echo ${{ github.event.head_commit.message }} | commitlint lint
+          echo "${{ github.event.head_commit.message }}"
+          echo "${{ github.event.head_commit.message }}" | commitlint lint
