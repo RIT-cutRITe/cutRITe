@@ -1,6 +1,12 @@
 ## CommitLint
 Check [here](https://commitlint.js.org/guides/local-setup) for a local setup guide. CommitLint will be enforced with Github Actions as well (soon :tm:).
 
+## Signing Keys
+The repository requires commits be signed, set up a GPG or SSH key for signing.
+
+https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key
+
+
 ## Decision Log
 | Decision | Category | Date | Reason |
 | -------- | -------- | ---- | ------ |
