@@ -16,7 +16,7 @@ jobs:
       # worth noting: this hardcodes the version of commitlint...
       # there is a go package that updates with the repo but i dont know how go works
       - name: Lint most recent commit
-        # if github.event.push.head_commit != null:
+        if: github.event.head_commit != null
         run: |
           echo "Getting commitlint with wget"
           wget https://github.com/conventionalcommit/commitlint/releases/download/v0.12.0/commitlint_v0.12.0_linux_386.tar.gz
@@ -27,5 +27,5 @@ jobs:
           echo "Adding /.local/bin to PATH"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           echo "Linting commit: "
-          echo ${{ github.event.push.head_commit.message }}
-          echo ${{ github.event.push.head_commit.message }} | commitlint lint
+          echo ${{ github.event.head_commit.message }}
+          echo ${{ github.event.head_commit.message }} | commitlint lint
