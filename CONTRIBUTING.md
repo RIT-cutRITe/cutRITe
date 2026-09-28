@@ -1,11 +1,19 @@
-## CommitLint
-Check [here](https://commitlint.js.org/guides/local-setup) for a local setup guide. CommitLint will be enforced with Github Actions as well (soon :tm:).
-
 ## Signing Keys
 The repository requires commits be signed, set up a GPG or SSH key for signing.
 
-https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key
+[GitHub docs about signing keys](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key)
 
+## CommitLint
+Check [this other repository](https://github.com/conventionalcommit/commitlint) for releases and local setup instructions, but basically:
+1. Download a release binary for your system
+2. Extract the release, and put the `commitlint` binary file on your PATH
+3. run `commitlint init` from the root folder of this repository. This will create a `.commitlint` folder in the repository, which is gitignored (on purpose). In that folder, you'll find `hooks/commit-msg`, a bash script which handles the local commit linting.
+4. Now, whenever you commit to this repository, commitlint will check the message to make sure it follows conventional commit standards. If the message does not, the commit will not apply.
+
+A proper conventional commit is of the form `type(scope?): subject`, where
+- type is one of `build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test`, which describes generally what kind of commit this is
+- scope is optional (omit the parentheses if you omit scope), and describes where the changes live. This isn't checked against file structure or anything, so "GitHub Actions" would be an acceptable scope despite not being a path in the repository. Scope is just about communicating where to find your changes to your fellow engineers.
+- subject is the description of the changes made. There is a character limit to this, to encourage keeping commit messages concise. If you're used to not using conventional commits, subject is where the "usual" commit message goes.
 
 ## Decision Log
 Date is technically date logged (as of now), but since decisions should be logged as they're made, it's not a huge difference most of the time.
