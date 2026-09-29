@@ -1,7 +1,7 @@
 ---
-name: 'SPIKE: [NAME]'
+name: SPIKE
 about: Create a research spike
-title: ''
+title: 'Spike: [NAME]'
 labels: ''
 assignees: ''
 

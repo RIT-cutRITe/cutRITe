@@ -1,7 +1,7 @@
 ---
-name: 'Epic: [NAME]'
+name: Epic
 about: Create Epic
-title: ''
+title: 'EPIC: [NAME]'
 labels: ''
 assignees: ''
 

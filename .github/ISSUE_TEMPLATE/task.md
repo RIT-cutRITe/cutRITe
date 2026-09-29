@@ -1,7 +1,7 @@
 ---
-name: 'Task : [NAME]'
+name: Task
 about: Create Task
-title: ''
+title: 'Task: [NAME]'
 labels: ''
 assignees: ''
 

@@ -1,7 +1,7 @@
 ---
-name: 'User Story: [NAME]'
+name: User Story
 about: Create a story
-title: ''
+title: 'Story: [NAME]'
 labels: ''
 assignees: ''
 
