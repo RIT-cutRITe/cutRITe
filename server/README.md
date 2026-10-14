@@ -9,7 +9,8 @@ Docker setup done by following [this guide](https://docs.docker.com/guides/pytho
 - On Linux, Run `source venv/bin/activate`; on Windows, Run `venv\Scripts\activate`. Now, your terminal will use the python, pip, etc. in the venv (which is good for a handful of reasons).
     - Make sure the activate script has execution permissions.
 - Run `pip install -r requirements.txt` to install necessary packages in the virtual environment. If requirements.txt changes, you'll probably need to do this step again.
-- Do your development. The rest of these steps assume you're in the virtual enviorment terminal.
+- VSCode might not recognise the venv right away. You can manually set the python environment it uses (for code highlighting and whatnot) in the bottom status bar by clicking the button between the Copilot and Notifications button, which is called whatever python enviorment it's using right now. You may need to browse for the Python in the venv (`venv/bin/python`), but once you do, the imports/etc. will highlight as normal.
+- Do your development. The rest of the sections assume you're in the virtual enviorment terminal.
 - When you're done, Run `deactivate` to exit the virtual environment terminal.
 
 **To run just the python script locally:**
@@ -21,13 +22,11 @@ Docker setup done by following [this guide](https://docs.docker.com/guides/pytho
 - Run `docker compose up --build` from this directory (cutRITe/server).
 - Open your browser to `localhost:8000` to see the server output directly.
 - When you're done, Ctrl+C in the terminal to close it. This does destroy the container. You could consider running the compose command with `-d` (for "detached") before the `--build` to use your terminal while it's running. Then, you'd stop the container with Docker Desktop for by searching for its ID in the terminal and killing it that way.
-- Doing this all once makes an image in Docker Desktop, which could be used to run all of this from Docker Desktop, except that didn't work when I tried it with default settings. I think something went sideways with exposing the port?
+- Doing this all once makes an image in Docker Desktop, which could be used to run all of this from Docker Desktop, except that didn't work when I tried it with default settings. Not sure why :/
 
 **When you make changes:**
 - Verify that the docker image still runs (and works)
 - If you added, removed, or changed any imports, reflect those changes in requirements.txt
-- Don't forget your conventional commit message(s)!
-
 ## For Production:
 
 Coming soon!
