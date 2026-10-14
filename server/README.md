@@ -19,14 +19,16 @@ Docker setup done by following [this guide](https://docs.docker.com/guides/pytho
 
 **To run the docker image locally:**
 - Make sure you have the docker daemon running (usually by opening Docker Desktop, though you can do it from the command line if you'd rather).
-- Run `docker compose up --build` from this directory (cutRITe/server).
-- Open your browser to `localhost:8000` to see the server output directly.
-- When you're done, Ctrl+C in the terminal to close it. This does destroy the container. You could consider running the compose command with `-d` (for "detached") before the `--build` to use your terminal while it's running. Then, you'd stop the container with Docker Desktop for by searching for its ID in the terminal and killing it that way.
+- Run `docker compose up --build` from this directory (cutRITe/server). Technically, this doesn't require you to be in the virtual envioronment terminal, since all the python stuff happens in a docker image anyways. It'll work fine either way.
+    - To run only the FastAPI server, run `docker compose up --build 'server'`. To run just the boxes server, run `docker compose up --build 'boxes'`.
+- Open your browser to `localhost:8000` to see the server output directly. Open your browser to `localhost:4455` to see the boxes server directly.
+- When you're done, Ctrl+C in the terminal to close it. This does destroy the container. You could consider running the compose command with `-d` (for "detached") before the `--build` to use your terminal while it's running. Then, you'd stop the container with Docker Desktop or by searching for its ID in the terminal and killing it that way.
 - Doing this all once makes an image in Docker Desktop, which could be used to run all of this from Docker Desktop, except that didn't work when I tried it with default settings. Not sure why :/
 
 **When you make changes:**
 - Verify that the docker image still runs (and works)
 - If you added, removed, or changed any imports, reflect those changes in requirements.txt
+
 ## For Production:
 
 Coming soon!
