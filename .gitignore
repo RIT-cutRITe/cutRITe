@@ -1,1 +1,3 @@
 .commitlint
+.idea
+**/node_modules
