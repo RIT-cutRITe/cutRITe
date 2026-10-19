@@ -1,23 +1,20 @@
-import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [vue()],
-    server: {
-        cors: {
-            // the origin you will be accessing via browser
-            origin: 'http://127.0.0.1:5173', // 'http://my-backend.example.com',
-        },
+  plugins: [
+    vue(),
+    vueJsx(),
+    vueDevTools(),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    build: {
-        // generate .vite/manifest.json in outDir
-        manifest: true,
-
-        rolldownOptions: {
-            // overwrite default .html entry
-            input: 'src/main.ts',
-        },
-    },
+  },
 })

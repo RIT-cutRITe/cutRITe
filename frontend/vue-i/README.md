@@ -1,7 +1,15 @@
-# Vue-i
+# vue-i
 
-like ui get it
+## How it was made
+Using
+```
+    yarn create vue
+```
 
-# Stack
-This is a Vue 3 + TypeScript + Vite project. This is where all of the UI will live, supported by the FastAPI server in the adjacent folder.
+The options selected were:
+- Typescript
+- JSX Support
+- Router for SPA development
+- Vitest
+- Cypress for End-to-end testing
 
