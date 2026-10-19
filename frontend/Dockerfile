@@ -1,9 +1,10 @@
 # Build the application into the dist/ folder
-FROM node:20-alpine AS build-stage
+FROM node:24-alpine AS build-stage
 WORKDIR /vue-i
-COPY package*.json ./
+COPY vue-i/package.json ./
+COPY vue-i/yarn.lock ./
 RUN yarn install
-COPY . .
+COPY vue-i/. .
 RUN yarn run build
 
 # Stage 2: Serve the application with Nginx
