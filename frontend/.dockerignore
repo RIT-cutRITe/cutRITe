@@ -1,0 +1,4 @@
+vue-i/node_modules
+cypress
+.vscode
+.gitignore

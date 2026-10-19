@@ -1,1 +1,6 @@
 .commitlint
+.idea
+**/node_modules/
+**/__pycache__/
+**/*.cfg
+**/.DS_Store
