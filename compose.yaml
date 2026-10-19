@@ -1,0 +1,41 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000 # outside : inside
+  boxes:
+    # borrowed from https://github.com/florianfesti/boxes.git with minor modification
+    build:
+      context: ./server/boxes
+      dockerfile: Dockerfile
+    command:
+      - /app/boxes_env/bin/gunicorn # rename env to boxes_env; see server/boxes/Dockerfile
+      - --reload
+      - -b
+      - "[::]:8000"
+      - -w
+      - "2"
+      - scripts.boxesserver
+    environment:
+      STATIC_URL: /static
+    # The original boxes compose has volumes, but we don't have any of those directories or files locally
+    # in this repository. It seems to work fine without the volumes, so win-win I suppose.
+    ports:
+      - 4455:8000
