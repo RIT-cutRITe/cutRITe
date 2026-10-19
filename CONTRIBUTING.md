@@ -17,12 +17,18 @@ A proper conventional commit is of the form `type(scope?): subject`, where
 
 ## Decision Log
 Date is technically date logged (as of now), but since decisions should be logged as they're made, it's not a huge difference most of the time.
-| Decision | Category | Date | Reason |
-| -------- | -------- | ---- | ------ |
-| Decision Log | Docs | 09/21/26 | Keeping track of decisions (and assumptions) made will be worth the effort in the long run |
-| Acceptable Timing <3s, most of the time should be <1s | Requirements | 09/24/26 | Need to have times to build architecture against. Sponsor approved before decision log was made |
-| GitHub | Tools, Git, Dev | 09/22/26 | Near-universal, perfect for open-source, plus gives access to GitHub Actions and Projects. Keeping all of that in one place should be very nice. |
-| Vue.js | Tools, UI | 09/22/26 | Vue is well-supported, well-documented, and provides a chance to get more tools in our toolboxes. |
-| FastAPI | Tools, Backend | 09/22/26 | Simple, Fast (at least, as fast as Python can really get), and some of the team knows it. Since the backend isn't super complex or bottlenecked, it seems a great fit. |
-| Docker | Tools, Deployment | 09/22/26 | Industry-standard, and the preference of the project sponsor. |
-| commitlint | Tools, Docs, Dev | 09/22/26 | Keeping the repository organized includes keeping commits informative and consistent, which commitlint is a valuable tool for. |
+| Decision                                              | Category                      | Date     | Reason                                                                                                                                                                 |
+| :---------------------------------------------------- | :---------------------------- | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Decision Log                                          | Docs                          | 09/21/26 | Keeping track of decisions (and assumptions) made will be worth the effort in the long run.                                                                            |
+| Acceptable Timing <3s, most of the time should be <1s | Requirements                  | 09/24/26 | Need to have times to build architecture against. Sponsor approved before decision log was made.                                                                       |
+| GitHub                                                | Tools, Git, Dev               | 09/22/26 | Near-universal, perfect for open-source, plus gives access to GitHub Actions and Projects. Keeping all of that in one place should be very nice.                       |
+| Vue.js                                                | Tools, UI                     | 09/22/26 | Vue is well-supported, well-documented, and provides a chance to get more tools in our toolboxes.                                                                      |
+| FastAPI                                               | Tools, Backend                | 09/22/26 | Simple, Fast (at least, as fast as Python can really get), and some of the team knows it. Since the backend isn't super complex or bottlenecked, it seems a great fit. |
+| Docker                                                | Tools, Deployment             | 09/22/26 | Industry-standard, and the preference of the project sponsor.                                                                                                          |
+| commitlint                                            | Tools, Docs, Dev              | 09/22/26 | Keeping the repository organized includes keeping commits informative and consistent, which commitlint is a valuable tool for.                                         |
+| Vite                                                  | Tools, UI, Front-end          | 10/05/26 | Team members have more experience with using Vite. We considered using Nuxt, but it is a superset of Vite which we may not fully utilize.                              |
+| Vitest                                                | Tools, UI, Front-end, Testing | 10/05/26 | Vite offers a testing library for creating unit tests. This package will allow us to define unit test we will add as part of our CI/CD.                                |
+| pytest                                                | Tools, Back-end, Testing      | 10/15/26 | Python has 2 testing frameworks but they're incredibly similar, and pytest outputs nicer                                                                               |
+| Vuetify                                               | Tools, UI, Front-end          | 10/15/26 |                                                                                                                                                                        |
+| Cypress                                               | Tools, Testing, end-end       | 10/19/26 | Testing tool perfect for end to end testing, shows our web-app in browser with scripted actions and expected responses.                                                |
+| End of sprint decision log update                     | Docs                          | 10/19/26 | Decision log in github is out of date; it is necessary to update it once in a while.                                                                                   |
