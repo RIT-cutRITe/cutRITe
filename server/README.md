@@ -32,6 +32,9 @@ Docker setup done by following [this guide](https://docs.docker.com/guides/pytho
 - Verify that the docker image still runs (and works)
 - If you added, removed, or changed any imports, reflect those changes in requirements.txt
 
+## Regarding Unit Tests
+pytest, by default, looks inside any files whose names begin with `test_` or end with `_test`. It finds every function whose name starts with `test_`, as well as methods named that way of classes whose names start with `Test`. Unit Tests you add, therefore, need to follow these naming conventions. It's also worth nothing that the `Test` class thing is so you can group tests together, especially useful if there's a set of functions which all need to mock the same object (so a class method which *doesn't* start with `test_` can set up the mock object) or otherwise share some set-up or tear-down functionality. Each test gets its own instance of that class, though, so state doesn't carry over between tests (which is good).
+
 ## For Production:
 
 Coming soon!
