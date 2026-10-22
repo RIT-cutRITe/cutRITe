@@ -29,6 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      working-directory: server
     - name: Test with pytest
       run:
         pytest --junit-xml=test-results.xml --cov=. --cov-report xml:./test-coverage.xml
