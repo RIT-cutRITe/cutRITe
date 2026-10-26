@@ -18,11 +18,19 @@ async def getAll():
 
     allValues = {}
 
-    for link in soup.find_all("a", href=True):
+    for span in soup.find_all("span", class_="gallery"):
+        link = span.find_all("a")[0]
+        image = link.find_all("img")[0]
+        src = image.get("src")
         name = link.get_text(strip=True)
+        title = link.get("title")
         href = link["href"]
 
         if name:
-            allValues[name] = [href]
+            allValues[name] = {
+                "link": href,
+                "image": src,
+                "title": title,
+            }
 
     return allValues
