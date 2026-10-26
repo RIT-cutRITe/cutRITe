@@ -1,10 +1,13 @@
+
 <script setup lang="ts"></script>
 
 <template>
   <v-app>
     <v-main>
       <v-container>
-        <v-btn color="primary">Vuetify Success!</v-btn>
+        <main>
+          <router-view></router-view>
+      </main>
       </v-container>
     </v-main>
   </v-app>
