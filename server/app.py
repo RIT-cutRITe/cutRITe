@@ -2,6 +2,35 @@ from bs4 import BeautifulSoup
 from contextlib import asynccontextmanager
 import requests
 from fastapi import FastAPI, Request, HTTPException, Query
+from pydantic import BaseModel, Field
+
+class Generator(BaseModel):
+    link: str = Field(
+        description="Relative URL of the generator",
+        examples=["ABox"]
+    )
+    name: str = Field(
+        description="Display name of the generator",
+        examples=["ABox"]
+    )
+    image: str | None = Field(
+        default=None,
+        description="Optional image URL"
+    )
+    title: str | None = Field(
+        default=None,
+        description="Additional generator description"
+    )
+
+class Parameter(BaseModel):
+    col1: str
+    col2: str
+    col3: str
+
+class ParametersResponse(BaseModel):
+    status: str
+    count: int
+    data: list[Parameter]
 
 URL = "http://boxes:8000"
 URL_2 = "http://boxes:8000/ABox"
@@ -47,6 +76,7 @@ def homepage_search(soup: BeautifulSoup, classname: str) -> dict:
 
 @app.get(
     "/getAll",
+    response_model=dict[str, Generator],
     tags=["Generators"],
     summary="Get all box generators",
     description="Retrieves all available generators from Boxes.py. Results are cached.")
@@ -70,6 +100,7 @@ async def getAll(request: Request):
 
 @app.get(
     "/getAllParams",
+    response_model=ParametersResponse,
     tags=["Generators"],
     summary="Get generator parameters",
     description="Retrieves available parameters for a specified Boxes.py generator.")
@@ -89,6 +120,8 @@ async def get_all_params(request: Request,
     soup = BeautifulSoup(response.text, "html.parser")
     
     data = []
+
+    # Replace these with the actual classes instead of creating maually.
     for row in soup.find_all('tr')[1:]:  # skip header
         cells = [td.get_text(strip=True) for td in row.find_all('td')]
         data.append({
