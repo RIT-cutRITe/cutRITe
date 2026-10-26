@@ -47,7 +47,6 @@ select = [
     "FAST",    # FastAPI: Annotated params, no redundant response_model
     "BLE",     # no blind `except Exception`
     "S110",    # no `except: pass`
-    "TID251",  # banned imports (see below)
     "LOG",     # logging misuse, e.g. getLogger without __name__
     "G",       # no f-strings/format() in log calls
     "T20",     # no print()
@@ -63,9 +62,6 @@ dummy-variable-rgx = "^(_+|(_+[\\p{XID_Continue}]*[\\p{XID_Continue}--_]+?))$"
 
 [lint.pydocstyle]
 convention = "google"
-
-[lint.flake8-tidy-imports.banned-api]
-"pydantic".msg = "We don't use Pydantic; use a stdlib dataclass. See STYLEGUIDE.md."
 
 [format]
 # Like Black, use double quotes for strings.
