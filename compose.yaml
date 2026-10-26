@@ -18,6 +18,8 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    environment:
+      LOG_LEVEL: INFO # DEBUG for more detail
     ports:
       - 8000:8000 # outside : inside
   boxes:
