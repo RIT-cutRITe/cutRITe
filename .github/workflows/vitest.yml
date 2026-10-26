@@ -1,0 +1,27 @@
+name: Vitest
+
+on:
+  push:
+    branches: [main]
+    paths: ["frontend/**", ".github/workflows/vitest.yml"]
+  pull_request:
+    paths: ["frontend/**", ".github/workflows/vitest.yml"]
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/vue-i
+    env:
+      # Skip Cyrpess Install
+      CYPRESS_INSTALL_BINARY: 0
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24 # update with frontend/Dockerfile if it updates
+          cache: yarn
+          cache-dependency-path: frontend/vue-i/yarn.lock
+      - run: yarn install --frozen-lockfile
+      - run: yarn test:unit --run
