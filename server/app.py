@@ -23,6 +23,6 @@ async def getAll():
         href = link["href"]
 
         if name:
-            allValues[name][href]
+            allValues[name] = [href]
 
     return allValues
