@@ -21,6 +21,28 @@ app = FastAPI(lifespan=lifespan)
 async def root():
     return {"message": "Hello, World!"}
 
+def homepage_search(soup: BeautifulSoup, classname: str) -> dict:
+    returnDict = {}
+    for span in soup.find_all("span", class_=classname):
+        link = span.find_all("a")[0]
+        image = link.find_all("img")
+        if len(image) > 0:
+            src = image[0].get("src")
+        name = link.get_text(strip=True)
+        title = link.get("title")
+        href = link["href"]
+
+        if name:
+            returnDict[href] = {
+                "link": href,
+                "name": name,
+            }
+            if image:
+                returnDict[name].update({"image": src})
+            if title:
+                returnDict[name].update({"title": title})
+    return returnDict
+
 @app.get("/getAll")
 async def getAll(request: Request):
     if len(request.app.state.itemsDict) == 0:
@@ -31,20 +53,10 @@ async def getAll(request: Request):
 
         allValues = {}
 
-        for span in soup.find_all("span", class_="gallery"):
-            link = span.find_all("a")[0]
-            image = link.find_all("img")[0]
-            src = image.get("src")
-            name = link.get_text(strip=True)
-            title = link.get("title")
-            href = link["href"]
-
-            if name:
-                allValues[name] = {
-                    "link": href,
-                    "image": src,
-                    "title": title,
-                }
+        # For all the normal items with images
+        allValues.update(homepage_search(soup, "gallery"))
+        # All the items without images have a different classname
+        allValues.update(homepage_search(soup, "gallery_missing"))
 
         request.app.state.itemsDict = allValues
     return request.app.state.itemsDict
