@@ -23,17 +23,18 @@ class Generator(BaseModel):
     )
 
 class Parameter(BaseModel):
-    col1: str
-    col2: str
-    col3: str
+    name: str
+    type: str
+    default: str | bool
+    description: str
+    options: list[str] | None = None
 
 class ParametersResponse(BaseModel):
     status: str
     count: int
-    data: list[Parameter]
+    data: dict[str, list[Parameter]]
 
 URL = "http://boxes:8000"
-URL_2 = "http://boxes:8000/ABox"
 
 # 1. Initialize state within a lifespan context manager
 @asynccontextmanager
@@ -118,22 +119,60 @@ async def get_all_params(request: Request,
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, "html.parser")
-    
-    data = []
 
-    # Replace these with the actual classes instead of creating maually.
-    for row in soup.find_all('tr')[1:]:  # skip header
-        cells = [td.get_text(strip=True) for td in row.find_all('td')]
-        data.append({
-            "col1": cells[0],
-            "col2": cells[1],
-            "col3": cells[2]
-        })
+    data = {}
 
-    response = {
+    for table in soup.select("form#arguments table"):
+        heading = table.find_previous_sibling("h3")
+        group = heading.get_text(strip=True) if heading else "Other"
+
+        data.setdefault(group, [])
+
+        for row in table.find_all("tr"):
+            label = row.find("label")
+            field = row.find("select") or row.find("input", id=True)
+
+            if not label or not field:
+                continue
+
+            name = field.get("name")
+            description = row.find("td", id=f"{name}_description")
+
+            if field.name == "select":
+                field_type = "select"
+                options = [
+                    option["value"]
+                    for option in field.find_all("option")
+                ]
+
+                selected = field.find("option", selected=True)
+                default = selected["value"] if selected else (
+                    options[0] if options else ""
+                )
+
+            elif field.get("type") == "checkbox":
+                field_type = "checkbox"
+                options = None
+                default = field.has_attr("checked")
+
+            else:
+                field_type = field.get("type", "text")
+                options = None
+                default = field.get("value", "")
+
+            data[group].append({
+                "name": name,
+                "type": field_type,
+                "default": default,
+                "description": (
+                    description.get_text(" ", strip=True)
+                    if description else ""
+                ),
+                "options": options
+            })
+
+    return {
         "status": "success",
-        "count": len(data),
+        "count": sum(len(parameters) for parameters in data.values()),
         "data": data
     }
-
-    return response
