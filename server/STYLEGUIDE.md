@@ -1,6 +1,6 @@
 # Python Style Guide
 
-Applies to everything under `server/`. Stack: Python 3.14+, FastAPI, Uvicorn, Docker (see the [Decision Log](../CONTRIBUTING.md#decision-log)).
+Applies to everything under `server/`. Stack: Python 3.14+, FastAPI, Pydantic, Uvicorn, Docker (see the [Decision Log](../CONTRIBUTING.md#decision-log)).
 
 If this guide and a tool disagree, the tool wins and this guide gets fixed.
 
@@ -20,7 +20,7 @@ Every function, method, and module-level variable whose type isn't obvious gets 
 - Use modern syntax: `list[str]`, `dict[str, int]`, `X | None`. Not `List`, `Dict`, `Optional`, `Union`.
 - Avoid `Any`. If you truly need it, leave a comment explaining why.
 - Use `Annotated` for FastAPI parameters so the type and its metadata stay together (see example below).
-- Request/response bodies are stdlib `@dataclass`es, never bare `dict`s. **Don't import `pydantic` directly**; FastAPI uses it internally, but our code stays on the stdlib.
+- Request/response bodies are Pydantic models, never bare `dict`s.
 - Type checking runs with [ty](https://docs.astral.sh/ty/) (`uvx ty check` from `server/`, configured in `ty.toml`). Ruff checks that hints exist; ty checks they're correct. Code must pass with no errors and no blanket ignores. A targeted ignore needs the rule name and a reason: `# ty: ignore[unresolved-import]  # boxes ships no type info`.
 
 ```python
@@ -69,33 +69,26 @@ Every route must have:
 - `summary=`: short title shown in the endpoint list.
 - A **docstring**: FastAPI uses it as the endpoint's description (Markdown is supported).
 - `tags=`: group related endpoints.
-- A typed return (a dataclass) so the response schema is documented.
+- A typed return (Pydantic model) or `response_model=` so the response schema is documented.
 - `responses=` for every non-200 status the endpoint can return.
-- `description=` (and `examples=` where helpful) on every path/query parameter.
-- An `Attributes:` section in each response/request dataclass's docstring. FastAPI shows the class docstring in the schema; per-field descriptions aren't available without Pydantic.
+- `description=` (and `examples=` where helpful) on every path/query parameter and model field.
 
 ```python
 """Endpoints for listing and rendering box generators."""
 
-from dataclasses import dataclass
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Path, Query
+from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/boxes", tags=["boxes"])
 
 
-@dataclass
-class BoxSummary:
-    """Short description of an available box generator.
+class BoxSummary(BaseModel):
+    """Short description of an available box generator."""
 
-    Attributes:
-        name: Unique generator name, e.g. ``ClosedBox``.
-        description: Human-readable summary of the generator.
-    """
-
-    name: str
-    description: str
+    name: str = Field(description="Unique generator name.", examples=["ClosedBox"])
+    description: str = Field(description="Human-readable summary of the generator.")
 
 
 @router.get(
