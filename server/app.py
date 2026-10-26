@@ -25,4 +25,4 @@ async def getAll():
         if name:
             allValues[name][href]
 
-    return {"hi", "hello"}
+    return allValues
