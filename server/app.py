@@ -1,9 +1,7 @@
-from http.client import HTTPException
-
 from bs4 import BeautifulSoup
 from contextlib import asynccontextmanager
 import requests
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Query
 
 URL = "http://boxes:8000"
 URL_2 = "http://boxes:8000/ABox"
@@ -15,7 +13,11 @@ async def lifespan(app: FastAPI):
     app.state.itemsDict = {}
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="cutRITe Boxes API",
+    description="API for retrieving Boxes.py generators and parameters.",
+    version="1.0.0",
+    lifespan=lifespan)
 
 @app.get("/")
 async def root():
@@ -43,7 +45,11 @@ def homepage_search(soup: BeautifulSoup, classname: str) -> dict:
                 returnDict[name].update({"title": title})
     return returnDict
 
-@app.get("/getAll")
+@app.get(
+    "/getAll",
+    tags=["Generators"],
+    summary="Get all box generators",
+    description="Retrieves all available generators from Boxes.py. Results are cached.")
 async def getAll(request: Request):
     if len(request.app.state.itemsDict) == 0:
         response = requests.get(URL, timeout=10)
@@ -62,8 +68,17 @@ async def getAll(request: Request):
     return request.app.state.itemsDict
 
 
-@app.get("/getAllParams")
-async def get_all_params(request: Request, name: str):
+@app.get(
+    "/getAllParams",
+    tags=["Generators"],
+    summary="Get generator parameters",
+    description="Retrieves available parameters for a specified Boxes.py generator.")
+async def get_all_params(request: Request,
+    name: str = Query(
+        ...,
+        description="The generator identifier returned by /getAll",
+        examples=["ABox"]
+    )):
     # Some verification that name isn't malicious
     if name not in request.app.state.itemsDict:
         raise HTTPException(status_code=400, detail=f"Generator {name} does not exist")
