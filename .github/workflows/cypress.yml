@@ -1,0 +1,23 @@
+name: Cypress
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cypress-io/github-action@v6
+        with:
+          working-directory: frontend/vue-i
+          build: yarn build
+          start: yarn preview
+          wait-on: http://localhost:4173
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: frontend/vue-i/cypress/screenshots
