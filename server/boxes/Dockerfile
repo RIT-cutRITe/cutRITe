@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1-labs
-# borrowed from https://github.com/florianfesti/boxes.git with minimal changes
+ # borrowed from https://github.com/florianfesti/boxes.git with minimal changes
 
 FROM python:3.12-slim AS builder
 
