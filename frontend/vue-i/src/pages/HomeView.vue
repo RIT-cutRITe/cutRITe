@@ -1,13 +1,29 @@
 <script setup lang="ts">
 
-import { computed, ref } from 'vue'
+import { computed, ref,reactive } from 'vue'
+
 import TemplateCard from '@/components/TemplateCard.vue';
 import templates from '@/data/templates';
 
 const page = ref(1)
-const activeTab = ref("None")
+const activeTab = ref('All')
+
+
 //get all types
-const templateTypes = computed(()=>[...new Set(templates.map(item => item.type))])
+const templateTypes = computed(()=>{
+    return ['All',... new Set(templates.map(item => item.type))]
+}
+)
+
+//filter by selected type
+
+const filterItems = computed(()=>{
+    console.log(activeTab)
+    if (activeTab.value === 'All'){
+        return templates
+    }
+    return templates.filter(i => i.type == activeTab.value || i.type == '')
+})
 
 
 </script>
@@ -17,23 +33,26 @@ const templateTypes = computed(()=>[...new Set(templates.map(item => item.type))
     <v-main>
         
         <v-container>
-            
-            <!-- <v-tabs
-                align-tabs="center"
-                color="deep-purple-accent-4"
-                >
-                <v-tab
-                v-for="t in templateTypes"
-                :value=t
-                >
-                {{ t }}
-                </v-tab>
-           
-            </v-tabs> -->
-            
 
+        <v-container>
+            <h1 class="text-h4 font-weight-bold mb-4">
+                Templates
+            </h1>
+
+            <v-chip-group  v-model="activeTab">
+                <v-chip
+                v-for="value in templateTypes"
+                :text=value
+                :value=value
+                filter
+                >
+                </v-chip>
+            </v-chip-group>
+        </v-container>
+       
+            
             <!-- All shown when template is not filtered-->
-            <v-data-iterator :items="templates" :page="page" :items-per-page="8">
+            <v-data-iterator :items="filterItems" :page="page" :items-per-page="8">
                 <template v-slot:default="{items}">
                 <v-row>
                 <v-col
