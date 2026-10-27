@@ -8,3 +8,6 @@ async def test_blank():
     assert type(result) is dict
     assert "message" in result
     assert result["message"] == "Hello, World!"
+
+def test_failure():
+    assert 1==2
