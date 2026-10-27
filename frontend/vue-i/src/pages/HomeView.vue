@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { computed, ref,reactive } from 'vue'
+import { computed, ref} from 'vue'
 
 import TemplateCard from '@/components/TemplateCard.vue';
 import templates from '@/data/templates';
@@ -12,11 +12,11 @@ const activeTab = ref('All')
 //get all types
 const templateTypes = computed(()=>{
     return ['All',... new Set(templates.map(item => item.type))]
-}
+    }
+
 )
 
 //filter by selected type
-
 const filterItems = computed(()=>{
     console.log(activeTab)
     if (activeTab.value === 'All'){
@@ -45,6 +45,7 @@ const filterItems = computed(()=>{
                 :text=value
                 :value=value
                 filter
+                color="white"
                 >
                 </v-chip>
             </v-chip-group>
