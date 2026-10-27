@@ -1,0 +1,29 @@
+[project]
+name = "cutrite-api"
+version = "0.1.0"
+description = "CutRITe API server"
+readme = "README.md"
+requires-python = ">=3.14"
+authors = [
+  { name = "Madison Savage", email = "eas7532@rit.edu" },
+  { name = "Will Poirier", email = "wmp9980@rit.edu" },
+  { name = "Aidan Behn-Wehner", email = "apb0941@rit.edu" },
+  { name = "Andrew Haitsch", email = "ahn6931@rit.edu" },
+  { name = "Michael Dibiase", email = "mjd3502@rit.edu" },
+  { name = "Carla Lopez", email = "csl5623@rit.edu" },
+]
+# Keep in sync with requirements.txt (used by the Dockerfile).
+dependencies = [
+  "fastapi==0.115.12",
+  "uvicorn==0.34.3",
+  "pydantic==2.14.1",
+  "ty>=0.0.92",
+  "requests>=2.34.2",
+  "beautifulsoup4>=4.15.0",
+]
+
+[dependency-groups]
+dev = [
+  "ruff",
+  "ty",
+]

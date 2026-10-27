@@ -1,0 +1,8 @@
+# Type checking for STYLEGUIDE.md. Run from server/: `uvx ty check`
+# Picks up installed packages from server/.venv automatically.
+
+[environment]
+python-version = "3.14"
+
+[terminal]
+error-on-warning = true

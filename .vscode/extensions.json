@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "charliermarsh.ruff",
+    "astral-sh.ty",
+    "Vue.volar",
+    "ms-azuretools.vscode-docker"
+  ],
+  "unwantedRecommendations": [
+    "ms-python.mypy-type-checker",
+    "ms-python.black-formatter",
+    "ms-python.flake8",
+    "ms-python.pylint"
+  ]
+}

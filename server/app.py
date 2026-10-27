@@ -1,8 +1,14 @@
-from bs4 import BeautifulSoup
+"""Primary Entrypoint for CutRITe API."""
+
+import logging
+import os
 from contextlib import asynccontextmanager
+
 import requests
-from fastapi import FastAPI, Request, HTTPException, Query
+from bs4 import BeautifulSoup
+from fastapi import FastAPI, HTTPException, Query, Request
 from pydantic import BaseModel, Field
+
 
 class Generator(BaseModel):
     link: str = Field(
@@ -49,15 +55,23 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan)
 
+# One logger to rule them all. Modules call logging.getLogger(__name__).
+logging.basicConfig(
+    level=os.environ.get("LOG_LEVEL", "INFO").upper(),
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
+
 @app.get("/")
 async def root():
     return {"message": "Hello, World!"}
 
 def homepage_search(soup: BeautifulSoup, classname: str) -> dict:
-    returnDict = {}
+    returnDict: dict = {}
     for span in soup.find_all("span", class_=classname):
         link = span.find_all("a")[0]
         image = link.find_all("img")
+        src = None
         if len(image) > 0:
             src = image[0].get("src")
         name = link.get_text(strip=True)
@@ -69,7 +83,7 @@ def homepage_search(soup: BeautifulSoup, classname: str) -> dict:
                 "link": href,
                 "name": name,
             }
-            if image:
+            if image and src:
                 returnDict[name].update({"image": src})
             if title:
                 returnDict[name].update({"title": title})

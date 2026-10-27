@@ -25,6 +25,7 @@
     "@types/node": "^24.13.4",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vitejs/plugin-vue-jsx": "^5.1.6",
+    "@vitest/coverage-v8": "4.1.12",
     "@vue/test-utils": "^2.5.0",
     "@vue/tsconfig": "^0.9.1",
     "cypress": "^16.0.0",
