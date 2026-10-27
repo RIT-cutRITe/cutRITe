@@ -1,4 +1,10 @@
 import app
+import pytest
+import asyncio
 
-def test_blank():
-    assert 1==1
+@pytest.mark.asyncio
+async def test_blank():
+    result = await app.root()
+    assert type(result) is dict
+    assert "message" in result
+    assert result["message"] == "Hello, World!"
