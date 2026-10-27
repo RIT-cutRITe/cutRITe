@@ -1,14 +1,9 @@
 # Python package dependencies for the application, pinned for reproducible builds.
 # See https://pip.pypa.io/en/stable/reference/requirements-file-format/
 
-fastapi==0.115.12
-uvicorn==0.34.3
-pydantic==2.14.1
-pytest==9.1.1
-
 fastapi>=0.115.12
 uvicorn>=0.34.3
-pytest>=9.1.1
+pytest==9.1.1
 pytest-cov # but i forgot to write down which version oops
 pytest-asyncio==1.4.1
 pydantic==2.14.1
