@@ -59,3 +59,6 @@ venv.bak/
 
 # Secrets
 db/password.txt
+
+# JUnit XML
+test-results.xml
