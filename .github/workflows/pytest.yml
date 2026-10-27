@@ -28,3 +28,7 @@ jobs:
       run: |
         pytest
       working-directory: server
+    - name: Check Code Coverage
+      run: |
+        pytest --cov=.
+      working-directory: server
