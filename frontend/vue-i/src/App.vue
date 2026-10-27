@@ -1,11 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import NavBar from '@/components/NavBar.vue'
+</script>
 
 <template>
   <v-app>
+    <NavBar />
     <v-main>
-      <v-container>
-        <v-btn color="primary">Vuetify Success!</v-btn>
-      </v-container>
+      <router-view />
     </v-main>
   </v-app>
 </template>
