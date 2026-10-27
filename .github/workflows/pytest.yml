@@ -31,10 +31,15 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run:
-        pytest --junit-xml=test-results.xml --cov=.
+        pytest --junit-xml=test-results.xml --cov=. --cov-report xml:./test-coverage.xml
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: (!cancelled())
       with:
         files: |
           server/test-results.xml
+    - name: Publish Coverage Results
+      uses: orgoro/coverage@v3.2
+      with:
+          coverageFile: server/test-coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
