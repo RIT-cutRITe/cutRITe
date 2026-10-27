@@ -10,6 +10,10 @@ on:
 jobs:
   unit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write   # lets the actions post PR comments
+      checks: write          # used by the test-results action
     defaults:
       run:
         working-directory: frontend/vue-i
@@ -24,4 +28,16 @@ jobs:
           cache: yarn
           cache-dependency-path: frontend/vue-i/yarn.lock
       - run: yarn install --frozen-lockfile
-      - run: yarn test:unit --run
+      - run: yarn test:unit --run --coverage
+
+      - name: Coverage comment
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: frontend/vue-i
+
+      - name: Test results comment
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: frontend/vue-i/test-results/junit.xml
