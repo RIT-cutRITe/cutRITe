@@ -2,7 +2,8 @@
 
 const props = defineProps<{
   name: string
-  imageURL?: string
+  image?: string
+  title:string
 }>()
 
 </script>
@@ -11,15 +12,22 @@ const props = defineProps<{
     <v-card
         class="mx-auto"
         max-width="344"
+        hover
+        :elevation="5"
+        rounded="lg"
     >
         <v-card-title
+        class="headline"
         >
             {{ name }}
         </v-card-title>
+        <v-card-text>
+           {{title}}
+        </v-card-text>
         <v-img
             height="200px"
-            :src="imageURL"
-            class="rounded-md"
+            :src="image"
+            rounded
         >
         </v-img>
         <v-card-actions>

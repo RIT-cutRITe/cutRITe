@@ -8,18 +8,16 @@ import templates from '@/data/templates';
 const page = ref(1)
 const activeTab = ref('All')
 
-
 //get all types
 const templateTypes = computed(()=>{
     return ['All',... new Set(templates.map(item => item.type))]
     }
-
 )
 
 //filter by selected type
 const filterItems = computed(()=>{
     console.log(activeTab)
-    if (activeTab.value === 'All'){
+    if (activeTab.value === 'All' || activeTab.value === undefined){
         return templates
     }
     return templates.filter(i => i.type == activeTab.value || i.type == '')
@@ -35,17 +33,19 @@ const filterItems = computed(()=>{
         <v-container>
 
         <v-container>
-            <h1 class="text-h4 font-weight-bold mb-4">
+            <h1 class="text-title-large">
                 Templates
             </h1>
 
-            <v-chip-group  v-model="activeTab">
+            <v-chip-group  v-model="activeTab" filter>
                 <v-chip
                 v-for="value in templateTypes"
                 :text=value
                 :value=value
+                variant="elevated"
+                class="ma-2"
+                color="indigo"
                 filter
-                color="white"
                 >
                 </v-chip>
             </v-chip-group>
@@ -56,18 +56,17 @@ const filterItems = computed(()=>{
             <v-data-iterator :items="filterItems" :page="page" :items-per-page="8">
                 <template v-slot:default="{items}">
                 <v-row>
-                <v-col
-                    v-for="item in items"
-                    cols="12"
-                    md="4"
-                    lg="3"
-                >
-                    <template-card :name=item.raw.name :image-u-r-l=item.raw.imageURL >
-                    </template-card>
-                
-                </v-col>
+                    <v-col
+                        v-for="item in items"
+                        cols="12"
+                        md="4"
+                        lg="3"
+                    >
+                        <template-card :name=item.raw.name :image=item.raw.image :title=item.raw.title>
+                        </template-card>
+                    
+                    </v-col>
                 </v-row>
-
                 </template>
 
                 <template v-slot:footer="{ pageCount }">
