@@ -4,3 +4,4 @@
 **/__pycache__/
 **/*.cfg
 **/.DS_Store
+**/.coverage
