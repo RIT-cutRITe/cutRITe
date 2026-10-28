@@ -70,7 +70,7 @@ const filterItems = computed(()=>{
                 </template>
 
                 <template v-slot:footer="{ pageCount }">
-                    <v-pagination v-model="page" :length="pageCount"></v-pagination>
+                    <v-pagination v-model="page" :length="pageCount" rounded="md"></v-pagination>
                 </template>
 
             </v-data-iterator>
