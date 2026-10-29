@@ -5,12 +5,13 @@ import { computed, ref} from 'vue'
 import TemplateCard from '@/components/TemplateCard.vue';
 import templates from '@/data/templates';
 
+
 const page = ref(1)
 const activeTab = ref('All')
 
 //get all types
 const templateTypes = computed(()=>{
-    return ['All',... new Set(templates.map(item => item.type))]
+    return ['All',... new Set(templates.map((item) => item.type))]
     }
 )
 
@@ -20,7 +21,7 @@ const filterItems = computed(()=>{
     if (activeTab.value === 'All' || activeTab.value === undefined){
         return templates
     }
-    return templates.filter(i => i.type == activeTab.value || i.type == '')
+    return templates.filter((i) => i.type == activeTab.value || i.type == '')
 })
 
 
@@ -33,7 +34,7 @@ const filterItems = computed(()=>{
         <v-container>
 
         <v-container>
-            <h1 class="text-title-large">
+            <h1 class="text-display-large">
                 Templates
             </h1>
 
@@ -42,9 +43,10 @@ const filterItems = computed(()=>{
                 v-for="value in templateTypes"
                 :text=value
                 :value=value
-                variant="elevated"
+                variant="tonal"
                 class="ma-2"
-                color="indigo"
+                base-color="grey-darken-2"
+                color="orange-accent-3"
                 filter
                 >
                 </v-chip>
@@ -70,7 +72,7 @@ const filterItems = computed(()=>{
                 </template>
 
                 <template v-slot:footer="{ pageCount }">
-                    <v-pagination v-model="page" :length="pageCount" rounded="md"></v-pagination>
+                    <v-pagination v-model="page" :length="pageCount" rounded="circle"></v-pagination>
                 </template>
 
             </v-data-iterator>

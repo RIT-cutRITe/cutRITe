@@ -12,29 +12,30 @@ const props = defineProps<{
     <v-card
         class="mx-auto"
         max-width="344"
-        hover
-        :elevation="5"
-        rounded="lg"
+        variant="outlined"
+        border="sm opacity-25"
     >
+      <v-card-item>
         <v-card-title
-        class="headline"
+        class="text-title-large"
         >
             {{ name }}
         </v-card-title>
-        <v-card-text>
+        <v-card-subtitle>
            {{title}}
-        </v-card-text>
+        </v-card-subtitle>
+      </v-card-item> 
+
         <v-img
             height="200px"
             :src="image"
-            rounded
         >
         </v-img>
         <v-card-actions>
       <v-btn
-        color="teal-accent-4"
+        color="orange-lighten-1"
         text="Open"
-        variant="text"
+        variant="tonal"
         @click=""
       ></v-btn>
     </v-card-actions>

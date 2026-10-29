@@ -1,138 +1,163 @@
-interface Templates {
+
+export interface Templates {
+    link:string,
     name: string,
     image?:string,
-    type: string,
     title:string
+    type: string,
 }
 
-const templates: Templates[] =
-[
+
+const apiResponse =  
     {
-        name:"ABox",
-        image: "https://florianfesti.github.io/boxes/static/samples/ABox-thumb.jpg",
-        type: "Box",
-        title: "Generator for box"
+            "Abox" : {
+            name:"ABox",
+            image: "https://florianfesti.github.io/boxes/static/samples/ABox-thumb.jpg",
+            type: "Box",
+            title: "Generator for box",
+            link:"alink"
     },
-    {
-       name:"AngledBox",
+
+       "Box2" :{name:"AngledBox",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg" ,
         type: "Box",
-        title: "Generator for box"
+        title: "Generator for box",
+        link:"alink"
     },
-    {
+        "Box3" :     {
        name:"Box3",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "Box" ,
-        title: "Generator for box"
+        title: "Generator for box",
+        link:"alink"
     },
-    {
+    "Box4" : {
        name:"Box4",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
          type: "Boxes with Flez",
-        title: "Generator for box"  
+        title: "Generator for box",
+        link:"alink"  
     },
-    {
+    "Box5" : {
        name:"Box5",
        image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
     type: "Boxes with Flez",
-        title: "Generator for box"  
+        title: "Generator for box",
+        link:"alink"  
     },
-    {
+    "Box6" : {
        name:"Box6",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "Boxes with Flez",
-        title: "Generator for box"  
+        title: "Generator for box",
+        link:"alink"  
     },
-    {
+    "Box7" : {
        name:"Box7",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "Trays and Drawer Inserts",
-        title: "Generator for box" 
+        title: "Generator for box",
+        link:"alink" 
     },
-    {
+    "Box8" : {
        name:"Box8",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type :"Trays and Drawer Inserts" ,
-        title: "Generator for box"
+        title: "Generator for box",
+        link:"alink"
     },
-    {
+    "Box9" : {
        name:"Box9",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "another type" ,
-        title: "Generator for box"
+        title: "Generator for box",
+        link:"alink"
     },
-    {
+    "Box10" : {
        name:"Box10",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "another type" ,
-        title: "Generator for box" 
+        title: "Generator for box",
+        link:"alink" 
     },
-    {
+    "Box11" : {
        name:"Box11",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "another type",
-        title: "Generator for box"  
+        title: "Generator for box",
+        link:"alink"  
     },
-    {
+    "Box12" : {
        name:"Box12",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "another type",
-        title: "Generator for box"  
+        title: "Generator for box",
+        link:"alink"  
     },
-    {
+    "Box13" : {
        name:"Box13",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc" ,
-        title: "Generator for box" 
+        title: "Generator for box",
+        link:"alink" 
     },
-    {
+    "Box14" : {
        name:"Box14",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc",
-        title: "Generator for box"   
+        title: "Generator for box",
+        link:"alink"   
     },
-    {
+    "Box15" : {
        name:"Box15",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc",
-        title: "Generator for box"   
+        title: "Generator for box",
+        link:"alink"   
     },
-    {
+    "Box16" : {
        name:"Box16",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc",
-        title: "Generator for box"   
+        title: "Generator for box",
+        link:"alink"   
     },
-    {
+    "Box17" : {
        name:"Box17",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc",
-        title: "Generator for box"   
+        title: "Generator for box",
+        link:"alink"   
     },
-    {
+    "Box18" : {
        name:"Box18",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc" ,
-        title: "Generator for box"  
+        title: "Generator for box",
+        link:"alink"  
     },
-    {
+    "Box20" : {
        name:"Box20",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc",
-        title: "Generator for box"   
+        title: "Generator for box",
+        link:"alink"   
     },
-    {
+    "Box21" : {
        name:"Box21",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc",
-        title: "Generator for box"   
+        title: "Generator for box",
+        link:"alink"   
     },
-    {
-        name:"Box21",
+    "Box22" : {
+        name:"Box22",
         image: "https://florianfesti.github.io/boxes/static/samples/AngledBox-thumb.jpg",
         type: "misc",
-        title: "Generator for box"   
+        title: "Generator for box",
+        link:"alink"   
     },
-]
+}
+const templates : Templates[] = Object.values(apiResponse)
 
 export default templates;
