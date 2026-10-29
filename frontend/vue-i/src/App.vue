@@ -1,4 +1,3 @@
-
 <script setup lang="ts"></script>
 
 <template>
@@ -7,7 +6,7 @@
       <v-container>
         <main>
           <router-view></router-view>
-      </main>
+        </main>
       </v-container>
     </v-main>
   </v-app>
