@@ -14,7 +14,8 @@ jobs:
       checks: write
     steps:
       - uses: actions/checkout@v4
-      - uses: cypress-io/github-action@v6
+      # >=7.4.4 needed: older ping fails instantly on runner Node >=24.20 (cypress-io/github-action#1873)
+      - uses: cypress-io/github-action@v7
         with:
           working-directory: frontend/vue-i
           build: yarn build
