@@ -3,6 +3,7 @@
 import { computed, ref} from 'vue'
 
 import TemplateCard from '@/components/TemplateCard.vue';
+
 import templates from '@/data/templates';
 
 
@@ -64,7 +65,12 @@ const filterItems = computed(()=>{
                         md="4"
                         lg="3"
                     >
-                        <template-card :name=item.raw.name :image=item.raw.image :title=item.raw.title>
+                        <template-card 
+                        :name=item.raw.name
+                        :image=item.raw.image
+                        :title=item.raw.title
+                        :type=item.raw.type
+                        >
                         </template-card>
                     
                     </v-col>

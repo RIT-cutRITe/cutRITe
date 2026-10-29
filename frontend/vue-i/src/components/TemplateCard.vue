@@ -4,6 +4,7 @@ const props = defineProps<{
   name: string
   image?: string
   title:string
+  type:string
 }>()
 
 </script>
@@ -31,13 +32,13 @@ const props = defineProps<{
             :src="image"
         >
         </v-img>
-        <v-card-actions>
-      <v-btn
-        color="orange-lighten-1"
-        text="Open"
-        variant="tonal"
-        @click=""
-      ></v-btn>
-    </v-card-actions>
+      <v-card-actions>
+        <v-btn
+          color="orange-lighten-1"
+          text="Open"
+          variant="tonal"
+          @click=""
+        ></v-btn>
+      </v-card-actions>
     </v-card>
 </template>
