@@ -1,0 +1,35 @@
+name: Cypress
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@v4
+      # >=7.4.4 needed: older ping fails instantly on runner Node >=24.20 (cypress-io/github-action#1873)
+      - uses: cypress-io/github-action@v7
+        with:
+          working-directory: frontend/vue-i
+          build: yarn build
+          start: yarn preview --host 127.0.0.1
+          wait-on: http://127.0.0.1:4173
+
+      - name: Test results comment
+        if: (!cancelled())
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          check_name: Cypress Results
+          files: frontend/vue-i/test-results/cypress-*.xml
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: frontend/vue-i/cypress/screenshots
