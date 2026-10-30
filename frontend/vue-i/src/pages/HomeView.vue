@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import TemplateCard from '@/components/TemplateCard.vue'
 
@@ -21,6 +21,11 @@ const filterItems = computed(() => {
   }
   return templates.filter((i) => i.type == activeTab.value || i.type == '')
 })
+
+//reset page value when changing filter
+watch(filterItems, () => {
+  page.value = 1
+})
 </script>
 
 <template>
@@ -33,7 +38,7 @@ const filterItems = computed(() => {
           <v-chip-group v-model="activeTab" filter>
             <v-chip
               v-for="value in templateTypes"
-              v-bind:key=value
+              v-bind:key="value"
               :text="value"
               :value="value"
               variant="tonal"
