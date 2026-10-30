@@ -9,3 +9,4 @@ pytest-asyncio==1.4.1
 beautifulsoup4==4.12.2
 requests==2.34.2
 pydantic==2.14.1
+httpx2
