@@ -1,35 +1,60 @@
-"""The methods for scraping boxes.py."""
+"""HTML scraping helpers for the Boxes.py web app."""
 
 from bs4 import BeautifulSoup
 
 
-def homepage_search(soup: BeautifulSoup, classname: str) -> dict:
-    """Parses through the homepage of boxes.py and retrieves all generator data."""
-    return_dict: dict = {}
-    for span in soup.find_all("span", class_=classname):
-        link = span.find_all("a")[0]
-        image = link.find_all("img")
-        src = None
-        if len(image) > 0:
-            src = image[0].get("src")
-        name = link.get_text(strip=True)
-        title = link.get("title")
-        href = link["href"]
+def menu_search(soup: BeautifulSoup) -> dict:
+    """Collect generators from the Boxes.py ``/Menu`` page.
 
-        if name:
+    Returns a dict keyed by each generator's href, with ``link``, ``name``,
+    ``type`` (menu category), ``title`` (description) and optional ``image``.
+    """
+    return_dict: dict = {}
+
+    for heading in soup.select("div.menu h3"):
+        category = heading.get_text(strip=True)
+
+        section = heading.find_next_sibling("div")
+        if not section:
+            continue
+
+        for item in section.select("li.thumbnail"):
+            link = item.find("a")
+            if not link:
+                continue
+
+            href = link.get("href")
+            name = link.get_text(strip=True)
+
+            if not href or not name:
+                continue
+
+            # Description is the text after the link
+            description = item.get_text(" ", strip=True)
+            description = description.removeprefix(name).lstrip(" -")
+            description = " ".join(description.split())
+
+            image = item.get("data-thumbnail")
+
             return_dict[href] = {
                 "link": href,
                 "name": name,
+                "type": category,
+                "title": description,
             }
-            if image and src:
-                return_dict[name].update({"image": src})
-            if title:
-                return_dict[name].update({"title": title})
+
+            if image:
+                return_dict[href]["image"] = image
+
     return return_dict
 
 
 def retrieve_parameters(soup: BeautifulSoup) -> dict:
-    """Parses through the page of a provided boxes.py generator and returns all the parameters."""
+    """Parse a generator page's argument form.
+
+    Returns a dict mapping each section heading to a list of parameter dicts
+    (``name``, ``type``, ``default``, ``description``, ``options``).
+    """
     data: dict = {}
     for table in soup.select("form#arguments table"):
         heading = table.find_previous_sibling("h3")
