@@ -1,0 +1,275 @@
+{
+	"status": "success",
+	"count": 32,
+	"data": {
+		"Settings for Finger Joints": [
+			{
+				"name": "FingerJoint_style",
+				"type": "select",
+				"default": "rectangular",
+				"description": "style of the fingers",
+				"options": [
+					"rectangular",
+					"springs",
+					"barbs",
+					"snap"
+				]
+			},
+			{
+				"name": "FingerJoint_surroundingspaces",
+				"type": "text",
+				"default": "2.0",
+				"description": "space at the start and end in multiple of normal spaces",
+				"options": null
+			},
+			{
+				"name": "FingerJoint_bottom_lip",
+				"type": "text",
+				"default": "0.0",
+				"description": "height of the bottom lips sticking out  (multiples of thickness) FingerHoleEdge only!",
+				"options": null
+			},
+			{
+				"name": "FingerJoint_edge_width",
+				"type": "text",
+				"default": "1.0",
+				"description": "space below holes of FingerHoleEdge (multiples of thickness)",
+				"options": null
+			},
+			{
+				"name": "FingerJoint_extra_length",
+				"type": "text",
+				"default": "0.0",
+				"description": "extra material to grind away burn marks (multiples of thickness)",
+				"options": null
+			},
+			{
+				"name": "FingerJoint_finger",
+				"type": "text",
+				"default": "2.0",
+				"description": "width of the fingers (multiples of thickness)",
+				"options": null
+			},
+			{
+				"name": "FingerJoint_play",
+				"type": "text",
+				"default": "0.0",
+				"description": "extra space to allow finger move in and out (multiples of thickness)",
+				"options": null
+			},
+			{
+				"name": "FingerJoint_space",
+				"type": "text",
+				"default": "2.0",
+				"description": "space between fingers (multiples of thickness)",
+				"options": null
+			},
+			{
+				"name": "FingerJoint_width",
+				"type": "text",
+				"default": "1.0",
+				"description": "width of finger holes (multiples of thickness)",
+				"options": null
+			}
+		],
+		"Settings for the Lid": [
+			{
+				"name": "Lid_brim_spacing",
+				"type": "text",
+				"default": "0.1",
+				"description": "space between the brim and the walls in mm (for flat* lids)",
+				"options": null
+			},
+			{
+				"name": "Lid_handle",
+				"type": "select",
+				"default": "none",
+				"description": "type of handle",
+				"options": [
+					"none",
+					"long_rounded",
+					"long_trapezoid",
+					"long_doublerounded",
+					"knob"
+				]
+			},
+			{
+				"name": "Lid_style",
+				"type": "select",
+				"default": "none",
+				"description": "type of lid to create",
+				"options": [
+					"none",
+					"flat",
+					"chest",
+					"overthetop",
+					"ontop",
+					"flatbrim",
+					"flatfang"
+				]
+			},
+			{
+				"name": "Lid_brim_height",
+				"type": "text",
+				"default": "1.0",
+				"description": "height of the brim in multiple of thickness (for flatbrim lids)",
+				"options": null
+			},
+			{
+				"name": "Lid_fang_size",
+				"type": "text",
+				"default": "1.0",
+				"description": "size of the fangs in multiples of thickness (for flatfang lids)",
+				"options": null
+			},
+			{
+				"name": "Lid_handle_height",
+				"type": "text",
+				"default": "8.0",
+				"description": "height of the handle in multiples of thickness (if applicable)",
+				"options": null
+			},
+			{
+				"name": "Lid_height",
+				"type": "text",
+				"default": "4.0",
+				"description": "height of the brim in multiples of thickness (if any)",
+				"options": null
+			},
+			{
+				"name": "Lid_play",
+				"type": "text",
+				"default": "0.1",
+				"description": "play when sliding the lid on in multiples of thickness (if applicable)",
+				"options": null
+			}
+		],
+		"ABox Settings": [
+			{
+				"name": "x",
+				"type": "text",
+				"default": "100.0",
+				"description": "inner width in mm (unless outside selected)",
+				"options": null
+			},
+			{
+				"name": "y",
+				"type": "text",
+				"default": "100.0",
+				"description": "inner depth in mm (unless outside selected)",
+				"options": null
+			},
+			{
+				"name": "h",
+				"type": "text",
+				"default": "100.0",
+				"description": "inner height in mm (unless outside selected)",
+				"options": null
+			},
+			{
+				"name": "outside",
+				"type": "checkbox",
+				"default": true,
+				"description": "treat sizes as outside measurements 🛈",
+				"options": null
+			},
+			{
+				"name": "bottom_edge",
+				"type": "select",
+				"default": "h",
+				"description": "edge type for bottom edge",
+				"options": [
+					"F",
+					"h",
+					"s",
+					"e"
+				]
+			}
+		],
+		"Default Settings": [
+			{
+				"name": "thickness",
+				"type": "text",
+				"default": "3.0",
+				"description": "thickness of the material (in mm) 🛈",
+				"options": null
+			},
+			{
+				"name": "burn",
+				"type": "text",
+				"default": "0.1",
+				"description": "burn correction (in mm)(bigger values for tighter fit) 🛈",
+				"options": null
+			},
+			{
+				"name": "format",
+				"type": "select",
+				"default": "svg",
+				"description": "format of resulting file 🛈",
+				"options": [
+					"dxf",
+					"gcode",
+					"lbrn2",
+					"pdf",
+					"plt",
+					"ps",
+					"svg",
+					"svg_Ponoko"
+				]
+			},
+			{
+				"name": "labels",
+				"type": "checkbox",
+				"default": true,
+				"description": "label the parts (where available)",
+				"options": null
+			},
+			{
+				"name": "reference",
+				"type": "text",
+				"default": "100.0",
+				"description": "print reference rectangle with given length (in mm)(zero to disable) 🛈",
+				"options": null
+			},
+			{
+				"name": "tabs",
+				"type": "text",
+				"default": "0.0",
+				"description": "width of tabs holding the parts in place (in mm)(not supported everywhere) 🛈",
+				"options": null
+			},
+			{
+				"name": "qr_code",
+				"type": "checkbox",
+				"default": false,
+				"description": "Add a QR Code with link or command line to the generated output",
+				"options": null
+			},
+			{
+				"name": "inner_corners",
+				"type": "select",
+				"default": "loop",
+				"description": "style for inner corners 🛈",
+				"options": [
+					"loop",
+					"corner",
+					"backarc"
+				]
+			},
+			{
+				"name": "spacing",
+				"type": "text",
+				"default": "0.5",
+				"description": "spacing around parts (multiples of thickness [: extra space in mm]) 🛈",
+				"options": null
+			},
+			{
+				"name": "debug",
+				"type": "checkbox",
+				"default": false,
+				"description": "print surrounding boxes for some structures 🛈",
+				"options": null
+			}
+		]
+	}
+}

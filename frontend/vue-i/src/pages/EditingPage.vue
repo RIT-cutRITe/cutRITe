@@ -1,22 +1,25 @@
 <script setup lang="ts">
+import Parameters from '@/components/Parameters.vue';
 import SvgEditor from '@/components/svgEditor.vue';
 
 </script>
 
 <template>
-  <v-container>
-    <h1 class="text-h4 mb-4">Editing</h1>
+  <!-- <v-container> -->
+    <!-- <h1 class="text-h4 mb-4">Editing</h1> -->
     <!-- TODO: editing tools and preview go here -->
-     <v-row>
-      <v-col cols="4">
-        <v-sheet class="pa-2">Parameters here</v-sheet>
+     <v-row size="10" no-gutters>
+      <v-col cols="3">
+        <!-- <v-sheet class="pa-2">Parameters here</v-sheet> -->
+         <parameters></parameters> <!--Parameter dropdowns-->
       </v-col>
-      <v-col cols="8">
+      <v-col cols="7">
         <!-- <v-sheet class="pa-2" background="primary ">Editing here</v-sheet> -->
         <svg-editor></svg-editor>
       </v-col>
      </v-row>
-  </v-container>
+  <!-- </v-container> -->
 </template>
 
 <style scoped></style>
+   

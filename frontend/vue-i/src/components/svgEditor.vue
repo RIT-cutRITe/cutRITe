@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-    <v-card class="mx-auto" max-width="600">
+    <v-card class="mx-auto" max-width="1200">
         <v-card-title>
             Scrollable SVG Canvas
         </v-card-title>
