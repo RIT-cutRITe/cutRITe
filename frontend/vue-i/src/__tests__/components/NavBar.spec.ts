@@ -13,4 +13,14 @@ describe('NavBar', () => {
     expect(wrapper.text()).toContain('cutRITe')
     expect(wrapper.text()).toContain('Editing')
   })
+
+  it('accepts text in the search box', async () => {
+    const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/:p(.*)*', component: {} }] })
+    const wrapper = mount({ components: { VLayout, NavBar }, template: '<v-layout><NavBar /></v-layout>' }, {
+      global: { plugins: [router] },
+    })
+    const input = wrapper.find<HTMLInputElement>('input[placeholder="Search"]')
+    await input.setValue('bread')
+    expect(input.element.value).toBe('bread')
+  })
 })
