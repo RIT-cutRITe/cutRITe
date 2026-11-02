@@ -14,7 +14,7 @@ authors = [
 ]
 # Keep in sync with requirements.txt (used by the Dockerfile).
 dependencies = [
-  "fastapi==0.115.12",
+  "fastapi==0.162.0",
   "uvicorn==0.34.3",
   "pydantic==2.14.2",
   "ty>=0.0.92",

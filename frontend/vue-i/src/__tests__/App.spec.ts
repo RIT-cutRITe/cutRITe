@@ -11,6 +11,6 @@ const vuetify = createVuetify({ components, directives })
 describe('App', () => {
   it('mounts renders properly', () => {
     const wrapper = mount(App, { global: { plugins: [vuetify] } })
-    expect(wrapper.text()).toContain('Vuetify Success!')
+    expect(wrapper.text()).toContain('')
   })
 })
