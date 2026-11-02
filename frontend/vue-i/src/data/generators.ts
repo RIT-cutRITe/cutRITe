@@ -1,4 +1,4 @@
-import type { Templates } from '@/types/Template'
+import type { Generator } from '@/types/Generator'
 const apiResponse = {
   Abox: {
     name: 'ABox',
@@ -149,6 +149,6 @@ const apiResponse = {
     link: 'alink',
   },
 }
-const templates: Templates[] = Object.values(apiResponse)
+const generators: Generator[] = Object.values(apiResponse)
 
-export default templates
+export default generators

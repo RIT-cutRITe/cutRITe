@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-import TemplateCard from '@/components/TemplateCard.vue'
+import GeneratorCard from '@/components/GeneratorCard.vue'
 
-import templates from '@/data/templates'
+import generators from '@/data/generators'
 
 const page = ref(1)
 const activeTab = ref('All')
 
 //get all types
-const templateTypes = computed(() => {
-  return ['All', ...new Set(templates.map((item) => item.type))]
+const generatorTypes = computed(() => {
+  return ['All', ...new Set(generators.map((item) => item.type))]
 })
 
 //filter by selected type
 const filterItems = computed(() => {
   console.log(activeTab)
   if (activeTab.value === 'All' || activeTab.value === undefined) {
-    return templates
+    return generators
   }
-  return templates.filter((i) => i.type == activeTab.value || i.type == '')
+  return generators.filter((i) => i.type == activeTab.value || i.type == '')
 })
 
 //reset page value when changing filter
@@ -33,11 +33,11 @@ watch(filterItems, () => {
     <v-main>
       <v-container>
         <v-container>
-          <h1 class="text-display-large">Templates</h1>
+          <h1 class="text-display-large">Generators</h1>
 
           <v-chip-group v-model="activeTab" filter>
             <v-chip
-              v-for="value in templateTypes"
+              v-for="value in generatorTypes"
               v-bind:key="value"
               :text="value"
               :value="value"
@@ -56,13 +56,13 @@ watch(filterItems, () => {
           <template v-slot:default="{ items }">
             <v-row>
               <v-col v-for="item in items" cols="12" md="3" lg="4" v-bind:key="item.raw.name">
-                <template-card
+                <generator-card
                   :name="item.raw.name"
                   :image="item.raw.image"
                   :title="item.raw.title"
                   :type="item.raw.type"
                 >
-                </template-card>
+                </generator-card>
               </v-col>
             </v-row>
           </template>

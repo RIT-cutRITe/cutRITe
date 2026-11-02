@@ -1,8 +1,8 @@
-import TemplateCard from '@/components/TemplateCard.vue'
+import GeneratorCard from '@/components/GeneratorCard.vue'
 import HomeView from '@/pages/HomeView.vue'
 import { mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
-import templates from '@/data/templates'
+import generators from '@/data/generators'
 
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -11,14 +11,14 @@ const vuetify = createVuetify({ components, directives })
 
 test('Testing Box Filtering for Homepage', async () => {
   const screen = mount(HomeView, { global: { plugins: [vuetify] } })
-  expect(screen.html()).toContain('Templates')
+  expect(screen.html()).toContain('Generators')
 
   //Click on the misc filter
   const chips = screen.findAll('.v-chip')
   const miscChip = chips.find((chip) => chip.text() == 'misc')
   await miscChip?.trigger('click')
 
-  const allCards = screen.findAllComponents(TemplateCard)
+  const allCards = screen.findAllComponents(GeneratorCard)
 
   //Check new cards types are 'misc';
   for (const card of allCards) {
@@ -28,14 +28,14 @@ test('Testing Box Filtering for Homepage', async () => {
 
 test('Testing Box Type Filtering for Homepage', async () => {
   const screen = mount(HomeView, { global: { plugins: [vuetify] } })
-  expect(screen.html()).toContain('Templates')
+  expect(screen.html()).toContain('Generators')
 
   //Click on the Box filter
   const chips = screen.findAll('.v-chip')
   const miscChip = chips.find((chip) => chip.text() == 'Box')
   await miscChip?.trigger('click')
 
-  const allCards = screen.findAllComponents(TemplateCard)
+  const allCards = screen.findAllComponents(GeneratorCard)
 
   //Check new cards types are 'Box;
   for (const card of allCards) {
@@ -43,12 +43,12 @@ test('Testing Box Type Filtering for Homepage', async () => {
   }
 })
 
-test('Test Pagination (clicking on one page changes templates)', async () => {
+test('Test Pagination (clicking on one page changes generators)', async () => {
   const screen = mount(HomeView, { global: { plugins: [vuetify] } })
 
-  //Get templates from 1st page
-  const allCards = screen.findAllComponents(TemplateCard)
-  const fistPagetemplateNames = allCards.map((card) => card.props('name'))
+  //Get generators from 1st page
+  const allCards = screen.findAllComponents(GeneratorCard)
+  const fistPagegeneratorsNames = allCards.map((card) => card.props('name'))
 
   //Click on next button
   const nextButton = screen.find('.v-pagination__next button')
@@ -56,25 +56,25 @@ test('Test Pagination (clicking on one page changes templates)', async () => {
 
   expect(screen.find('.v-pagination__item--is-active').text()).toBe('2')
 
-  //Get templates from 2nd page
-  const secondPageCards = screen.findAllComponents(TemplateCard)
-  const secondPageTemplateNames = secondPageCards.map((card) => card.props('name'))
+  //Get Generators from 2nd page
+  const secondPageCards = screen.findAllComponents(GeneratorCard)
+  const secondPageGeneratoreNames = secondPageCards.map((card) => card.props('name'))
 
   //Compare that cards are different
-  expect(fistPagetemplateNames).not.toEqual(secondPageTemplateNames)
+  expect(fistPagegeneratorsNames).not.toEqual(secondPageGeneratoreNames)
 })
 
-test('Homepage renders Templates heading', () => {
+test('Homepage renders Generators heading', () => {
   const screen = mount(HomeView, { global: { plugins: [vuetify] } })
 
-  expect(screen.text()).toContain('Templates')
+  expect(screen.text()).toContain('Generators')
 })
 
 test('Changing filter resets pagination to page 1', async () => {
   const screen = mount(HomeView, { global: { plugins: [vuetify] } })
 
-  // Check that there are enough templates for multiple pages
-  if (templates.length <= 8) return
+  // Check that there are enough Generators for multiple pages
+  if (generators.length <= 8) return
 
   // Navigate to page 2
   const nextButton = screen.find('.v-pagination__next button')

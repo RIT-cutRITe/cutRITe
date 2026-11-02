@@ -1,4 +1,4 @@
-export interface Templates {
+export interface Generator {
   link: string
   name: string
   image?: string
