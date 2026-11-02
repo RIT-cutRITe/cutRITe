@@ -18,10 +18,18 @@ dependencies = [
   "uvicorn==0.34.3",
   "pydantic==2.14.1",
   "ty>=0.0.92",
+  "requests>=2.34.2",
+  "beautifulsoup4>=4.15.0",
 ]
 
 [dependency-groups]
 dev = [
   "ruff",
   "ty",
+  "pytest",
+  "httpx",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["test"]

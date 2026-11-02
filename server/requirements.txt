@@ -6,4 +6,7 @@ uvicorn>=0.34.3
 pytest==9.1.1
 pytest-cov # but i forgot to write down which version oops
 pytest-asyncio==1.4.1
+beautifulsoup4==4.12.2
+requests==2.34.2
 pydantic==2.14.1
+httpx2
