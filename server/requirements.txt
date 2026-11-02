@@ -8,5 +8,5 @@ pytest-cov # but i forgot to write down which version oops
 pytest-asyncio==1.4.1
 beautifulsoup4==4.12.2
 requests==2.34.2
-pydantic==2.14.1
+pydantic==2.14.2
 httpx2
