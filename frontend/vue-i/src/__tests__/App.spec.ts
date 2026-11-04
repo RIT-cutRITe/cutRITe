@@ -15,10 +15,5 @@ describe('App', () => {
     await router.isReady()
     const wrapper = mount(App, { global: { plugins: [router] } })
     expect(wrapper.text()).toContain('cutRITe')
-  it('mounts and renders the navbar', async () => {
-    router.push('/editing')
-    await router.isReady()
-    const wrapper = mount(App, { global: { plugins: [router] } })
-    expect(wrapper.text()).toContain('cutRITe')
   })
 })
