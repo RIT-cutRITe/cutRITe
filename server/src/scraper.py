@@ -45,7 +45,7 @@ def menu_search(soup: BeautifulSoup) -> dict:
             }
 
             if image:
-                return_dict[href]["image"] = URL + "?path=" + str(image)
+                return_dict[href]["image"] = URL + "/getImage?path=" + str(image)
 
     return return_dict
 
