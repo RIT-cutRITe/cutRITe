@@ -12,7 +12,6 @@ import requests
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from requests import Response
 
 from src.scraper import menu_search, retrieve_parameters
 from src.types import Generator, ParametersResponse
@@ -111,7 +110,7 @@ async def get_all_params(request: Request,
 
 @app.get(
     "/getImage",
-    # response_model=Response,
+    # response_model=ParametersResponse,
     tags=["Generators"],
     summary="Get generator image from path",
     description="Retrieves image for a specified Boxes.py image link.")
