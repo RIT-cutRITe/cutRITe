@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from requests import Response
 
 from src.scraper import menu_search, retrieve_parameters
 from src.types import Generator, ParametersResponse
@@ -112,9 +113,9 @@ async def get_image(request: Request, path: Annotated[str, Query(
         ...,
         description="The image returned by /getAll",
         examples=["ABox"]
-    )]) -> bytes:
+    )]) -> Response:
     """."""
     result = requests.get(URL + path)
     if result.status_code > 300:
         raise HTTPException(result.status_code, detail="Image not found: " + path)
-    return result.content
+    return result
