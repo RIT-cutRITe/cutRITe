@@ -11,6 +11,7 @@ from typing import Annotated
 import requests
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.scraper import menu_search, retrieve_parameters
 from src.types import Generator, ParametersResponse
@@ -30,6 +31,12 @@ app = FastAPI(
     description="API for retrieving Boxes.py generators and parameters.",
     version="1.0.0",
     lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080", "http://localhost:5173"],
+    allow_methods=["GET"],
+)
 
 # One logger to rule them all. Modules call logging.getLogger(__name__).
 logging.basicConfig(

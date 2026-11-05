@@ -2,6 +2,7 @@
 
 from bs4 import BeautifulSoup
 
+URL = "http://localhost:4455"
 
 def menu_search(soup: BeautifulSoup) -> dict:
     """Collect generators from the Boxes.py ``/Menu`` page.
@@ -44,7 +45,7 @@ def menu_search(soup: BeautifulSoup) -> dict:
             }
 
             if image:
-                return_dict[href]["image"] = image
+                return_dict[href]["image"] = URL + str(image)
 
     return return_dict
 
