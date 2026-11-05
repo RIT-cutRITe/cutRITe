@@ -101,3 +101,20 @@ async def get_all_params(request: Request,
         "count": sum(len(parameters) for parameters in data.values()),
         "data": data
     }
+
+@app.get(
+    "/getImage",
+    # response_model=ParametersResponse,
+    tags=["Generators"],
+    summary="Get generator image from path",
+    description="Retrieves image for a specified Boxes.py image link.")
+async def get_image(request: Request, path: Annotated[str, Query(
+        ...,
+        description="The image returned by /getAll",
+        examples=["ABox"]
+    )]) -> bytes:
+    """."""
+    result = requests.get(URL + path)
+    if result.status_code > 300:
+        raise HTTPException(result.status_code, detail="Image not found: " + path)
+    return result.content
