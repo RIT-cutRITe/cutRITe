@@ -10,9 +10,8 @@ from typing import Annotated
 
 import requests
 from bs4 import BeautifulSoup
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from requests import Response
 
 from src.scraper import menu_search, retrieve_parameters
 from src.types import Generator, ParametersResponse
@@ -105,7 +104,7 @@ async def get_all_params(request: Request,
 
 @app.get(
     "/getImage",
-    # response_model=ParametersResponse,
+    response_model=Response,
     tags=["Generators"],
     summary="Get generator image from path",
     description="Retrieves image for a specified Boxes.py image link.")
@@ -118,4 +117,6 @@ async def get_image(request: Request, path: Annotated[str, Query(
     result = requests.get(URL + path)
     if result.status_code > 300:
         raise HTTPException(result.status_code, detail="Image not found: " + path)
-    return result
+    result.json()
+    result.content
+    return Response(result.content, media_type="image/jpeg")
