@@ -110,7 +110,7 @@ async def get_all_params(request: Request,
 
 @app.get(
     "/getImage",
-    # response_model=ParametersResponse,
+    response_model=Response,
     tags=["Generators"],
     summary="Get generator image from path",
     description="Retrieves image for a specified Boxes.py image link.")
