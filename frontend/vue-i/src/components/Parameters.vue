@@ -3,16 +3,7 @@ import { reactive } from 'vue'
 //Will later be replaced with a get... getAllParams?name=<name>
 //<name> will likely be a prop? passed from homepage through
 import paramsJson from '@/data/params.json'
-
-type ParamValue = string | boolean
-
-interface Param {
-  name: string
-  type: 'text' | 'select' | 'checkbox'
-  default: ParamValue
-  description: string
-  options: string[] | null
-}
+import type { Param } from '@/types/Params'
 
 // { "Settings for the Lid": [Param, ...], ... }
 const sections = paramsJson.data as Record<string, Param[]>
