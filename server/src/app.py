@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from requests import Response
 
 from src.scraper import menu_search, retrieve_parameters
 from src.types import Generator, ParametersResponse
