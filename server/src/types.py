@@ -33,9 +33,17 @@ class Parameter(BaseModel):
     default: str | bool
     description: str
     options: list[str] | None = None
+    value: str | None = None
 
 class ParametersResponse(BaseModel):
     """Response of ``/getAllParams``: parameters grouped by section heading."""
     status: str
     count: int
     data: dict[str, list[Parameter]]
+
+# class GenerateParameter(BaseModel):
+
+
+class GenerateParamters(BaseModel):
+    """."""
+    params: dict[str, list[Parameter]]

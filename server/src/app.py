@@ -14,7 +14,7 @@ from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.scraper import menu_search, retrieve_parameters
-from src.types import Generator, ParametersResponse
+from src.types import GenerateParamters, Generator, ParametersResponse
 
 # Base URL of the Boxes.py service.
 URL = "http://boxes:8000"
@@ -124,3 +124,28 @@ async def get_image(request: Request, path: Annotated[str, Query(
     if result.status_code > 300:
         raise HTTPException(result.status_code, detail="Image not found: " + path)
     return Response(result.content, media_type="image/jpeg")
+
+@app.post(
+    "/generate",
+    tags=["Generators"],
+    summary="Get generator svg",
+    description="Retrieves svg for a specified Boxes.py generator and parameters.")
+async def generate(request: Request,
+    name: Annotated[str, Query(
+        ...,
+        description="The generator identifier returned by /getAll",
+        examples=["ABox"]
+    )], parameters: GenerateParamters) -> Response:
+    """."""
+    # url = URL.join([param[0] for key, param in parameters.params.items()])
+    url = URL
+    for _section_name, section in parameters.params.items():
+        for parameter in section:
+            if parameter.value:
+                url += f"?{parameter.name}={parameter.value}"
+            elif parameter.default:
+                url += f"{parameter.name}={parameter.default}"
+            else:
+                logger.log(logging.WARNING, f"No value or default for {parameter.name}")  # noqa: G004 # circular error?
+    result = requests.get(url)
+    return Response(result.content, media_type="image/svg+xml")

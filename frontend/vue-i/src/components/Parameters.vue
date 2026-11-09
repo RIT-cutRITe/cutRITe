@@ -17,6 +17,10 @@ for (const params of Object.values(sections)) {
     values[p.name] = p.default
   }
 }
+
+function generate() {
+  // fetch()
+}
 </script>
 
 <template>
@@ -26,7 +30,7 @@ for (const params of Object.values(sections)) {
       <v-expansion-panel v-for="(params, sectionName) in sections" :key="sectionName" :title="sectionName">
         <v-expansion-panel-text>
           <template v-for="p in params" :key="p.name">
-            <v-select
+            <v-select @change="log_change"
               v-if="p.type === 'select'"
               v-model="values[p.name]"
               :label="p.name"
@@ -35,7 +39,7 @@ for (const params of Object.values(sections)) {
               persistent-hint
             />
 
-            <v-checkbox
+            <v-checkbox @change="log_change"
               v-else-if="p.type === 'checkbox'"
               v-model="values[p.name]"
               :label="p.name"
@@ -44,7 +48,7 @@ for (const params of Object.values(sections)) {
             />
 
             <!-- "text" and any unknown type fall back to a text field -->
-            <v-text-field
+            <v-text-field @change="log_change"
               v-else
               v-model="values[p.name]"
               :label="p.name"

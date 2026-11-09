@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Parameters from '@/components/Parameters.vue';
 import SvgEditor from '@/components/svgEditor.vue';
-
+import values from '@/components/Parameters.vue'
 </script>
 
 <template>
@@ -15,7 +15,7 @@ import SvgEditor from '@/components/svgEditor.vue';
       </v-col>
       <v-col cols="7">
         <!-- <v-sheet class="pa-2" background="primary ">Editing here</v-sheet> -->
-        <svg-editor></svg-editor>
+        <svg-editor :Parameters="values"></svg-editor>
       </v-col>
      </v-row>
   <!-- </v-container> -->
