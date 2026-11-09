@@ -35,13 +35,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:8080", "http://localhost:5173"],
-    allow_methods=["GET"],
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:5173"],
-    allow_methods=["GET"],
+    allow_methods=["GET, POST"],
 )
 
 # One logger to rule them all. Modules call logging.getLogger(__name__).
@@ -110,7 +104,7 @@ async def get_all_params(request: Request,
 
 @app.get(
     "/getImage",
-    response_model=Response,
+    # response_model=Response,
     tags=["Generators"],
     summary="Get generator image from path",
     description="Retrieves image for a specified Boxes.py image link.")

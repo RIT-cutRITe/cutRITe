@@ -5,6 +5,8 @@ import { reactive } from 'vue'
 import paramsJson from '@/data/params.json'
 import type { Param } from '@/types/Params'
 
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+
 // { "Settings for the Lid": [Param, ...], ... }
 const sections = paramsJson.data as Record<string, Param[]>
 
@@ -17,10 +19,20 @@ for (const params of Object.values(sections)) {
     values[p.name] = p.default
   }
 }
+const model = defineModel()
 
-function generate() {
-  // fetch()
+async function generate() {
+  // TODO: add box name from current box as query param instead of assuming ABox
+  const response = await fetch(API_URL + "?name=ABox", {
+    method: "POST",
+    body: JSON.stringify(
+      values
+    )
+  })
+  model.value = response.body
 }
+
+await generate() // get the default svg for this box
 </script>
 
 <template>
@@ -30,7 +42,7 @@ function generate() {
       <v-expansion-panel v-for="(params, sectionName) in sections" :key="sectionName" :title="sectionName">
         <v-expansion-panel-text>
           <template v-for="p in params" :key="p.name">
-            <v-select @change="log_change"
+            <v-select @change="generate"
               v-if="p.type === 'select'"
               v-model="values[p.name]"
               :label="p.name"
@@ -39,7 +51,7 @@ function generate() {
               persistent-hint
             />
 
-            <v-checkbox @change="log_change"
+            <v-checkbox @change="generate"
               v-else-if="p.type === 'checkbox'"
               v-model="values[p.name]"
               :label="p.name"
@@ -48,7 +60,7 @@ function generate() {
             />
 
             <!-- "text" and any unknown type fall back to a text field -->
-            <v-text-field @change="log_change"
+            <v-text-field @change="generate"
               v-else
               v-model="values[p.name]"
               :label="p.name"

@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import Parameters from '@/components/Parameters.vue';
 import SvgEditor from '@/components/svgEditor.vue';
-import values from '@/components/Parameters.vue'
+// import values from '@/components/Parameters.vue'
+
+const svg_file = ref('')
 </script>
 
 <template>
@@ -11,11 +14,11 @@ import values from '@/components/Parameters.vue'
      <v-row size="10" no-gutters>
       <v-col cols="3">
         <!-- <v-sheet class="pa-2">Parameters here</v-sheet> -->
-         <parameters></parameters> <!--Parameter dropdowns-->
+         <parameters v-model="svg_file"></parameters> <!--Parameter dropdowns-->
       </v-col>
       <v-col cols="7">
         <!-- <v-sheet class="pa-2" background="primary ">Editing here</v-sheet> -->
-        <svg-editor :Parameters="values"></svg-editor>
+        <svg-editor :svg="svg_file"></svg-editor>
       </v-col>
      </v-row>
   <!-- </v-container> -->

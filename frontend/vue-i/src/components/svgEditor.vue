@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps(['svg'])
+</script>
 
 <template>
     <v-card class="mx-auto" max-width="1200">
@@ -9,7 +11,7 @@
         <div class="image-viewport overflow-auto bg-grey-lighten-3">
             <!--The inner content-->
             <img
-                src="../data/BreadBox.svg"
+                :src="svg"
                 alt="scrollable-img"
             />
         </div>
