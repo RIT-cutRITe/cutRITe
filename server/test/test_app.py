@@ -73,7 +73,7 @@ def test_get_all(client: TestClient) -> None:
     data = response.json()
     assert data["ABox"]["name"] == "ABox"
     assert data["ABox"]["type"] == "Boxes"
-    assert data["ABox"]["image"] == "/abox.png"
+    assert data["ABox"]["image"] == "http://localhost:8000/getImage?path=/abox.png"
 
 
 def test_get_all_params(client: TestClient) -> None:
