@@ -1,4 +1,5 @@
-import { vi } from 'vitest'
+import { afterAll, afterEach, vi } from 'vitest'
+import { server } from './src/mocks/server'
 import { config } from '@vue/test-utils'
 import vuetify from './src/plugins/vuetify'
 
@@ -14,3 +15,8 @@ vi.stubGlobal(
     disconnect() {}
   },
 )
+
+// No backend in tests: MSW answers API calls; any unmocked request fails the test.
+server.listen({ onUnhandledFrame: 'error' })
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
