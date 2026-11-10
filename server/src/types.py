@@ -40,3 +40,13 @@ class ParametersResponse(BaseModel):
     status: str
     count: int
     data: dict[str, list[Parameter]]
+
+
+class Description(BaseModel):
+    """Response of ``/getDescription``: details scraped from a generator page."""
+    name: str = Field(description="Display name of the generator", examples=["ABox"])
+    description: str = Field(description="General description of the generator")
+    images: list[str] = Field(
+        default_factory=list,
+        description="Image URLs, in the same format as /getAll"
+    )
