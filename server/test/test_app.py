@@ -22,6 +22,8 @@ MENU_HTML = """
 """
 
 PARAMS_HTML = """
+<h2>ABox</h2>
+<p>A simple box</p>
 <form id="arguments">
   <h3>Box</h3>
   <table>
@@ -32,7 +34,12 @@ PARAMS_HTML = """
     </tr>
   </table>
 </form>
+<div class="description">
+  <p>Longer text about the box.</p>
+  <div><img src="static/samples/ABox.jpg" alt="Picture of box."></div>
+</div>
 """
+
 
 
 class FakeResponse:
@@ -97,6 +104,22 @@ def test_get_all_params_unknown_generator(client: TestClient) -> None:
     """Check that /getAllParams rejects an unknown generator with a 400."""
     response = client.get("/getAllParams", params={"name": "Nope"})
     assert response.status_code == 400
+
+
+def test_get_description(client: TestClient) -> None:
+    """Check that /getDescription returns the name, description and images."""
+    client.get("/getAll")
+    response = client.get("/getDescription", params={"name": "ABox"})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["name"] == "ABox"
+    assert body["description"] == "A simple box\n\nLonger text about the box."
+    assert body["images"] == ["http://localhost:8000/getImage?path=/static/samples/ABox.jpg"]
+
+
+def test_get_description_unknown_generator(client: TestClient) -> None:
+    """Check that /getDescription rejects an unknown generator with a 400."""
+    assert client.get("/getDescription", params={"name": "Nope"}).status_code == 400
 
 
 def test_get_image(client: TestClient) -> None:

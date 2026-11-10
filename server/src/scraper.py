@@ -101,3 +101,37 @@ def retrieve_parameters(soup: BeautifulSoup) -> dict:
             )
 
     return data
+
+
+def retrieve_description(soup: BeautifulSoup) -> dict:
+    """Parse a generator page for its name, description and images.
+
+    Returns a dict with ``name`` (page heading), ``description`` (the short
+    docstring plus the long description text) and ``images`` (proxied
+    ``/getImage`` URLs for every image in the description section).
+    """
+    heading = soup.find("h2")
+    name = heading.get_text(strip=True) if heading else ""
+
+    parts: list[str] = []
+    short = heading.find_next_sibling("p") if heading else None
+    if short and short.get_text(strip=True):
+        parts.append(short.get_text(" ", strip=True))
+
+    images: list[str] = []
+    section = soup.select_one("div.description")
+    if section:
+        for paragraph in section.find_all(["p", "li"]):
+            text = paragraph.get_text(" ", strip=True)
+            if text:
+                parts.append(text)
+
+        for img in section.find_all("img"):
+            src = img.get("src")
+            if src:
+                src = str(src)
+                if not src.startswith("/"):
+                    src = "/" + src
+                images.append(URL + "/getImage?path=" + src)
+
+    return {"name": name, "description": "\n\n".join(parts), "images": images}

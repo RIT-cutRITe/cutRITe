@@ -13,8 +13,8 @@ from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.scraper import menu_search, retrieve_parameters
-from src.types import Generator, ParametersResponse
+from src.scraper import menu_search, retrieve_description, retrieve_parameters
+from src.types import Description, Generator, ParametersResponse
 
 # Base URL of the Boxes.py service.
 URL = "http://boxes:8000"
@@ -101,6 +101,32 @@ async def get_all_params(request: Request,
         "count": sum(len(parameters) for parameters in data.values()),
         "data": data
     }
+
+@app.get(
+    "/getDescription",
+    response_model=Description,
+    tags=["Generators"],
+    summary="Get generator description",
+    description="Retrieves the name, description and images of a specified Boxes.py generator.")
+async def get_description(request: Request,
+    name: Annotated[str, Query(
+        ...,
+        description="The generator identifier returned by /getAll",
+        examples=["ABox"]
+    )]) -> dict:
+    """Scrape one generator's page and return its name, description and images.
+
+    Raises:
+        HTTPException: 400 if ``name`` was not returned by ``/getAll``.
+    """
+    if name not in request.app.state.itemsDict:
+        raise HTTPException(status_code=400, detail=f"Generator {name} does not exist")
+
+    response = requests.get(URL + "/" + name, timeout=10)
+    response.raise_for_status()
+
+    return retrieve_description(BeautifulSoup(response.text, "html.parser"))
+
 
 @app.get(
     "/getImage",
