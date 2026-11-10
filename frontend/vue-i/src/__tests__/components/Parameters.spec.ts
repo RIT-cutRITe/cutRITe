@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
 import { VLayout, VSelect } from 'vuetify/components'
 import Parameters from '../../components/Parameters.vue'
 import paramsJson from '../../data/params.json'
@@ -8,12 +8,21 @@ type Param = { name: string; type: string; default: string | boolean; options: s
 const sections = paramsJson.data as Record<string, Param[]>
 const allParams = Object.values(sections).flat()
 
+// Parameters now loads its sections from the API; serve params.json instead.
+beforeEach(() => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+    ok: true,
+    json: async () => paramsJson,
+  } as Response)
+})
+
 //Panel contents are lazy-rendered by Vuetify, so open every panel before querying inputs.
 async function mountOpen() {
   const wrapper = mount(
-    { components: { VLayout, Parameters }, template: '<v-layout><Parameters /></v-layout>' },
+    { components: { VLayout, Parameters }, template: '<v-layout><Parameters name="ABox" /></v-layout>' },
     { attachTo: document.body },
   )
+  await flushPromises()
   for (const header of wrapper.findAll('.v-expansion-panel-title')) {
     await header.trigger('click')
   }
@@ -27,8 +36,9 @@ function inputFor(wrapper: ReturnType<typeof mount>, name: string) {
 }
 
 describe('Parameters', () => {
-  it('renders the heading and one panel per JSON section', () => {
-    const wrapper = mount(Parameters)
+  it('renders the heading and one panel per JSON section', async () => {
+    const wrapper = mount(Parameters, { props: { name: 'ABox' } })
+    await flushPromises()
     expect(wrapper.text()).toContain('Parameters:')
     const titles = wrapper.findAll('.v-expansion-panel-title').map((t) => t.text())
     expect(titles).toEqual(Object.keys(sections))

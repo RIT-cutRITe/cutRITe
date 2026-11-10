@@ -1,17 +1,20 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 
-// Edge cases the real params.json never contains, so the JSON module is mocked.
+// Edge cases the real params.json never contains, so the API response is mocked.
 async function mountWith(data: Record<string, unknown[]>) {
-  vi.resetModules()
-  vi.doMock('@/data/params.json', () => ({ default: { status: 'success', count: 0, data } }))
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+    ok: true,
+    json: async () => ({ status: 'success', count: 0, data }),
+  } as Response)
   const { default: Parameters } = await import('../../components/Parameters.vue')
-  const wrapper = mount(Parameters)
+  const wrapper = mount(Parameters, { props: { name: 'ABox' } })
+  await flushPromises()
   for (const header of wrapper.findAll('.v-expansion-panel-title')) await header.trigger('click')
   return wrapper
 }
 
-afterEach(() => vi.doUnmock('@/data/params.json'))
+afterEach(() => vi.restoreAllMocks())
 
 describe('Parameters edge cases', () => {
   it('renders a select whose options are null as an empty select', async () => {
