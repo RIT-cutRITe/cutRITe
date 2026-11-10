@@ -4,6 +4,9 @@ import { reactive } from 'vue'
 //<name> will likely be a prop? passed from homepage through
 import paramsJson from '@/data/params.json'
 import type { Param } from '@/types/Params'
+const props = defineProps<{
+  name: string
+}>()
 
 // { "Settings for the Lid": [Param, ...], ... }
 const sections = paramsJson.data as Record<string, Param[]>
