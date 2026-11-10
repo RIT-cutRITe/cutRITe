@@ -5,6 +5,7 @@ import router from '@/router';
 
 import { ref, watch } from 'vue';
 
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 const props = defineProps<{
   name: string | null
@@ -28,13 +29,17 @@ function handleNavigation() {
     //parameters and svgeditor need data prop to handle
 }
 
-watch(dialog, (newValue) => {
- 
+watch(dialog, async (newValue) => {
 //here make api call
   if (newValue) {
-    description.value = mockDescription
-    console.log(description.value.name)
-    console.log(description.value.description)
+    try {
+        const res = await fetch(`${API_URL}/getDescription?name=${props.name}`)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data: Description = await res.json()
+            description.value = data
+    } catch (e) {
+        console.warn('Could not load generators from API, using mock data', e)
+    }
   }
 });
 
@@ -50,10 +55,11 @@ watch(dialog, (newValue) => {
     >
       <v-card
       >
-      <h1 v-if="description">{{ props.name }}</h1>
+      <h1 v-if="description">{{ description.name }}</h1>
+      <p v-if="description">{{ description.description }}</p>
         
-      <v-carousel hide-delimiters>
-            <v-carousel-item v-if="description "v-for="item in description.images"
+      <v-carousel hide-delimiters v-if="description">
+            <v-carousel-item v-for="item in description.images"
                 :src="item"
                 cover
             ></v-carousel-item>
