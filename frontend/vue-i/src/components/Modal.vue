@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Description } from '@/types/Description'
-import mockDescription from '@/data/generatorDescription'
 import router from '@/router';
 
 import { ref, watch } from 'vue';
@@ -24,7 +23,7 @@ function handleNavigation() {
     console.log("routing to next page")
     router.push({ name: 'editing', params: { name: props.name } })
 
-    //go to editiing page for modal
+    //go to editing page for modal
     //editing page makes api call
     //parameters and svgeditor need data prop to handle
 }
