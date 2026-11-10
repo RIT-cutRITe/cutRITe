@@ -1,5 +1,5 @@
-import { vi } from 'vitest'
-import { config } from '@vue/test-utils'
+import { afterEach, vi } from 'vitest'
+import { config, enableAutoUnmount } from '@vue/test-utils'
 import vuetify from './src/plugins/vuetify'
 
 // Install the app's Vuetify (with the theme colors) for every mounted component.
@@ -22,3 +22,7 @@ vi.stubGlobal('visualViewport', {
   addEventListener() {},
   removeEventListener() {},
 })
+
+// Unmount every wrapper after each test so Vuetify timers (e.g. VImg's poll) stop
+// before jsdom is torn down, which otherwise throws "window is not defined".
+enableAutoUnmount(afterEach)
