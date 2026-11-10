@@ -5,6 +5,13 @@ const props = defineProps<{
   title: string
   type: string
 }>()
+
+const emit = defineEmits(['open'])
+
+function buttonClick() {
+  emit('open',true)
+}
+
 </script>
 
 <template>
@@ -25,7 +32,7 @@ const props = defineProps<{
 
     <v-divider></v-divider>
     <v-card-actions>
-      <v-btn color="orange-lighten-1" text="Open" variant="tonal"></v-btn>
+      <v-btn color="orange-lighten-1" text="Open" variant="tonal" @click="buttonClick"></v-btn>
     </v-card-actions>
   </v-card>
 </template>

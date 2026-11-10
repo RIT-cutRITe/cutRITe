@@ -7,6 +7,12 @@ const svg_file = ref('')
 </script>
 
 <template>
+    <template>
+    <div>
+      <!-- The current route is accessible as $route in the template -->
+      User {{ $route.params.id }}
+    </div>
+  </template>
   <!-- <v-container> -->
     <!-- <h1 class="text-h4 mb-4">Editing</h1> -->
     <!-- TODO: editing tools and preview go here -->
