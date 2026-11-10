@@ -14,3 +14,11 @@ vi.stubGlobal(
     disconnect() {}
   },
 )
+
+// jsdom has no visualViewport, which Vuetify overlays (v-dialog) read when positioning.
+vi.stubGlobal('visualViewport', {
+  width: 1024,
+  height: 768,
+  addEventListener() {},
+  removeEventListener() {},
+})
