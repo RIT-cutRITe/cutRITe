@@ -72,12 +72,18 @@ async def get_all_params(request: Request,
         ...,
         description="The generator identifier returned by /getAll",
         examples=["ABox"]
-    )]) -> dict:
+    )],
+    advanced: Annotated[bool, Query(
+        description="Flag for if we are including advanced parameters in response, defaults to 'False'",
+    )] = False #defaults to false when no parameter provided
+    ) -> dict:
     """Scrape one generator's page and return its parameters grouped by section.
-
+    Also includes the adavanced parameter to signal if we should include advanced parameters
+    URL/getAllParams?name=<name>&advanced=<bool> where advanced defaults to False.
     Raises:
         HTTPException: 400 if ``name`` was not returned by ``/getAll``.
     """
+
     # Some verification that name isn't malicious
     if name not in request.app.state.itemsDict:
         raise HTTPException(status_code=400, detail=f"Generator {name} does not exist")
