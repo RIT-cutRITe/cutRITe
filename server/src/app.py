@@ -10,10 +10,11 @@ from typing import Annotated
 
 import requests
 from bs4 import BeautifulSoup
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 
-from src.scraper import menu_search, retrieve_parameters
-from src.types import Generator, ParametersResponse
+from src.scraper import menu_search, retrieve_description, retrieve_parameters
+from src.types import Description, Generator, ParametersResponse
 
 # Base URL of the Boxes.py service.
 URL = "http://boxes:8000"
@@ -30,6 +31,12 @@ app = FastAPI(
     description="API for retrieving Boxes.py generators and parameters.",
     version="1.0.0",
     lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080", "http://localhost:5173"],
+    allow_methods=["GET"],
+)
 
 # One logger to rule them all. Modules call logging.getLogger(__name__).
 logging.basicConfig(
@@ -94,3 +101,46 @@ async def get_all_params(request: Request,
         "count": sum(len(parameters) for parameters in data.values()),
         "data": data
     }
+
+@app.get(
+    "/getDescription",
+    response_model=Description,
+    tags=["Generators"],
+    summary="Get generator description",
+    description="Retrieves the name, description and images of a specified Boxes.py generator.")
+async def get_description(request: Request,
+    name: Annotated[str, Query(
+        ...,
+        description="The generator identifier returned by /getAll",
+        examples=["ABox"]
+    )]) -> dict:
+    """Scrape one generator's page and return its name, description and images.
+
+    Raises:
+        HTTPException: 400 if ``name`` was not returned by ``/getAll``.
+    """
+    if name not in request.app.state.itemsDict:
+        raise HTTPException(status_code=400, detail=f"Generator {name} does not exist")
+
+    response = requests.get(URL + "/" + name, timeout=10)
+    response.raise_for_status()
+
+    return retrieve_description(BeautifulSoup(response.text, "html.parser"))
+
+
+@app.get(
+    "/getImage",
+    # response_model=Response,
+    tags=["Generators"],
+    summary="Get generator image from path",
+    description="Retrieves image for a specified Boxes.py image link.")
+async def get_image(request: Request, path: Annotated[str, Query(
+        ...,
+        description="The image returned by /getAll",
+        examples=["ABox"]
+    )]) -> Response:
+    """."""
+    result = requests.get(URL + path)
+    if result.status_code > 300:
+        raise HTTPException(result.status_code, detail="Image not found: " + path)
+    return Response(result.content, media_type="image/jpeg")

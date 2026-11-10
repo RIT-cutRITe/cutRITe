@@ -22,6 +22,8 @@ MENU_HTML = """
 """
 
 PARAMS_HTML = """
+<h2>ABox</h2>
+<p>A simple box</p>
 <form id="arguments">
   <h3>Box</h3>
   <table>
@@ -32,15 +34,22 @@ PARAMS_HTML = """
     </tr>
   </table>
 </form>
+<div class="description">
+  <p>Longer text about the box.</p>
+  <div><img src="static/samples/ABox.jpg" alt="Picture of box."></div>
+</div>
 """
+
 
 
 class FakeResponse:
     """Stand-in for ``requests.Response``."""
 
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str = "", status_code: int = 200, content: bytes = b"") -> None:
         """Store the canned response body."""
         self.text = text
+        self.status_code = status_code
+        self.content = content
 
     def raise_for_status(self) -> None:
         """Do nothing, as a successful response would."""
@@ -50,8 +59,12 @@ class FakeResponse:
 def client(monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
     """Return a client whose upstream Boxes.py requests serve canned HTML."""
 
-    def fake_get(url: str, timeout: int) -> FakeResponse:
-        """Return the menu or parameters page depending on the URL."""
+    def fake_get(url: str, timeout: int | None = None) -> FakeResponse:
+        """Return the menu, an image, or the parameters page depending on the URL."""
+        if url.endswith("missing.png"):
+            return FakeResponse(status_code=404)
+        if url.endswith(".png"):
+            return FakeResponse(content=b"fake-image")
         return FakeResponse(MENU_HTML if url.endswith("/Menu") else PARAMS_HTML)
 
     monkeypatch.setattr(requests, "get", fake_get)
@@ -73,7 +86,7 @@ def test_get_all(client: TestClient) -> None:
     data = response.json()
     assert data["ABox"]["name"] == "ABox"
     assert data["ABox"]["type"] == "Boxes"
-    assert data["ABox"]["image"] == "/abox.png"
+    assert data["ABox"]["image"].endswith("/getImage?path=/abox.png")
 
 
 def test_get_all_params(client: TestClient) -> None:
@@ -91,3 +104,38 @@ def test_get_all_params_unknown_generator(client: TestClient) -> None:
     """Check that /getAllParams rejects an unknown generator with a 400."""
     response = client.get("/getAllParams", params={"name": "Nope"})
     assert response.status_code == 400
+
+
+def test_get_description(client: TestClient) -> None:
+    """Check that /getDescription returns the name, description and images."""
+    client.get("/getAll")
+    response = client.get("/getDescription", params={"name": "ABox"})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["name"] == "ABox"
+    assert body["description"] == "A simple box\n\nLonger text about the box."
+    assert body["images"] == ["http://localhost:8000/getImage?path=/static/samples/ABox.jpg"]
+
+
+def test_get_description_unknown_generator(client: TestClient) -> None:
+    """Check that /getDescription rejects an unknown generator with a 400."""
+    assert client.get("/getDescription", params={"name": "Nope"}).status_code == 400
+
+
+def test_get_image(client: TestClient) -> None:
+    """Check that /getImage proxies the image bytes as a JPEG."""
+    response = client.get("/getImage", params={"path": "/abox.png"})
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "image/jpeg"
+    assert response.content == b"fake-image"
+
+
+def test_get_image_not_found(client: TestClient) -> None:
+    """Check that /getImage passes through an upstream 404."""
+    response = client.get("/getImage", params={"path": "/missing.png"})
+    assert response.status_code == 404
+
+
+def test_get_image_missing_path(client: TestClient) -> None:
+    """Check that /getImage requires the path query parameter."""
+    assert client.get("/getImage").status_code == 422
