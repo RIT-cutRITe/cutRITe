@@ -40,10 +40,3 @@ class ParametersResponse(BaseModel):
     status: str
     count: int
     data: dict[str, list[Parameter]]
-
-# class GenerateParameter(BaseModel):
-
-
-class GenerateParamters(BaseModel):
-    """."""
-    params: dict[str, list[Parameter]]

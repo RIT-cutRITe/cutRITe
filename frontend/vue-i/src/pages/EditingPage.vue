@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import Parameters from '@/components/Parameters.vue';
 import SvgEditor from '@/components/svgEditor.vue';
-// import values from '@/components/Parameters.vue'
 
 const svg_file = ref('')
 </script>

@@ -23,16 +23,21 @@ const model = defineModel()
 
 async function generate() {
   // TODO: add box name from current box as query param instead of assuming ABox
-  const response = await fetch(API_URL + "?name=ABox", {
+  const response = await fetch(API_URL + "/generate" + "?name=ABox", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(
       values
     )
   })
-  model.value = response.body
+  if (!response.ok) {
+    console.error("generate failed", response.status, await response.text())
+    return
+  }
+  model.value = await response.text()
 }
 
-await generate() // get the default svg for this box
+generate() // get the default svg for this box
 </script>
 
 <template>

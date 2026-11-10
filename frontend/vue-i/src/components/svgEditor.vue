@@ -10,10 +10,7 @@ const props = defineProps(['svg'])
         <!-- container for visible frame of svvg-->
         <div class="image-viewport overflow-auto bg-grey-lighten-3">
             <!--The inner content-->
-            <img
-                :src="svg"
-                alt="scrollable-img"
-            />
+            <div v-html="svg"></div>
         </div>
     </v-card>
 </template>

@@ -2,7 +2,8 @@
 
 from bs4 import BeautifulSoup
 
-URL = "http://localhost:4455"
+URL = "http://localhost:8000"
+
 
 def menu_search(soup: BeautifulSoup) -> dict:
     """Collect generators from the Boxes.py ``/Menu`` page.
