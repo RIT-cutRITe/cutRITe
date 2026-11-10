@@ -7,9 +7,11 @@ export const handlers = [
   http.get('*/getAll', () =>
     HttpResponse.json(Object.fromEntries(mockGenerators.map((g, i) => [String(i), g]))),
   ),
-  http.post('*/generate', () =>
-    new HttpResponse('<svg xmlns="http://www.w3.org/2000/svg"/>', {
-      headers: { 'Content-Type': 'image/svg+xml' },
-    }),
+  http.post(
+    '*/generate',
+    () =>
+      new HttpResponse('<svg xmlns="http://www.w3.org/2000/svg"/>', {
+        headers: { 'Content-Type': 'image/svg+xml' },
+      }),
   ),
 ]
