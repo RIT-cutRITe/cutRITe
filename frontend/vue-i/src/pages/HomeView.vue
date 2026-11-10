@@ -4,9 +4,14 @@ import { computed, ref, watch } from 'vue'
 import GeneratorCard from '@/components/GeneratorCard.vue'
 
 import generators from '@/data/generators'
+import CardModal from '@/components/CardModal.vue'
+import Modal from '@/components/Modal.vue'
 
 const page = ref(1)
 const activeTab = ref('All')
+const dialog = ref(false)
+const selectedItem = ref(null)
+
 
 //get all types
 const generatorTypes = computed(() => {
@@ -26,6 +31,7 @@ const filterItems = computed(() => {
 watch(filterItems, () => {
   page.value = 1
 })
+
 </script>
 
 <template>
@@ -56,13 +62,24 @@ watch(filterItems, () => {
           <template v-slot:default="{ items }">
             <v-row>
               <v-col v-for="item in items" cols="12" md="3" lg="4" v-bind:key="item.raw.name">
-                <generator-card
+               
+                <!-- <GeneratorCard
                   :name="item.raw.name"
                   :image="item.raw.image"
                   :title="item.raw.title"
                   :type="item.raw.type"
-                >
-                </generator-card>
+                  @open="openModal"
+                />
+                
+                <Modal v-model="dialog" :name="selectedItem"/> -->
+
+                <CardModal
+                  :name="item.raw.name"
+                  :image="item.raw.image"
+                  :title="item.raw.title"
+                  :type="item.raw.type"
+                />
+                
               </v-col>
             </v-row>
           </template>
