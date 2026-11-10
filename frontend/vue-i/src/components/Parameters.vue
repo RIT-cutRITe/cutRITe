@@ -1,25 +1,36 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 //Will later be replaced with a get... getAllParams?name=<name>
 //<name> will likely be a prop? passed from homepage through
-import paramsJson from '@/data/params.json'
 import type { Param } from '@/types/Params'
 const props = defineProps<{
   name: string
 }>()
 
-// { "Settings for the Lid": [Param, ...], ... }
-const sections = paramsJson.data as Record<string, Param[]>
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+
+const sections = ref<Record<string, Param[]>>({})
+let values = reactive<Record<string, any>>({})
+
+onMounted(async () => {
+  try {
+    const res = await fetch(`${API_URL}/getAllParams?name=${props.name}`)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const response = await res.json()
+    sections.value = response.data
+  } catch (e) {
+    console.warn('Could not load parameters from API', e)
+  }
+  for (const params of Object.values(sections.value)) {
+    for (const p of params) {
+      values[p.name] = p.default
+    }
+  }
+})
 
 // One reactive value per parameter, keyed by name and seeded from "default".
 // v-model on each input writes back into this object.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- holds strings (text/select) and booleans (checkbox)
-const values = reactive<Record<string, any>>({})
-for (const params of Object.values(sections)) {
-  for (const p of params) {
-    values[p.name] = p.default
-  }
-}
 </script>
 
 <template>
