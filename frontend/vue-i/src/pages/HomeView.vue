@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 
-import GeneratorCard from '@/components/GeneratorCard.vue'
 
-import mockGenerators from '@/data/generators'
 import type { Generator } from '@/types/Generator'
 import CardModal from '@/components/CardModal.vue'
-import Modal from '@/components/Modal.vue'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 // Start with mock data; replace with the backend's list once it loads.
-const generators = ref<Generator[]>(mockGenerators)
+const generators = ref<Generator[]>([])
 
 onMounted(async () => {
   try {
@@ -27,8 +24,6 @@ onMounted(async () => {
 
 const page = ref(1)
 const activeTab = ref('All')
-const dialog = ref(false)
-const selectedItem = ref(null)
 
 
 //get all types
@@ -80,16 +75,6 @@ watch(filterItems, () => {
           <template v-slot:default="{ items }">
             <v-row>
               <v-col v-for="item in items" cols="12" md="3" lg="4" v-bind:key="item.raw.name">
-               
-                <!-- <GeneratorCard
-                  :name="item.raw.name"
-                  :image="item.raw.image"
-                  :title="item.raw.title"
-                  :type="item.raw.type"
-                  @open="openModal"
-                />
-                
-                <Modal v-model="dialog" :name="selectedItem"/> -->
 
                 <CardModal
                   :name="item.raw.name"
