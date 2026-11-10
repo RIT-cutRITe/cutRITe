@@ -40,4 +40,5 @@ jobs:
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
+          check_name: Vitest Results
           files: frontend/vue-i/test-results/junit.xml
