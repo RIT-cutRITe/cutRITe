@@ -1,31 +1,49 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
-import GeneratorCard from '@/components/GeneratorCard.vue'
 
-import generators from '@/data/generators'
+import type { Generator } from '@/types/Generator'
+import CardModal from '@/components/CardModal.vue'
+
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+
+const generators = ref<Generator[]>([])
+
+onMounted(async () => {
+  try {
+    const res = await fetch(`${API_URL}/getAll`)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data: Record<string, Generator> = await res.json()
+    generators.value = Object.values(data).map((g) => ({ ...g, title: g.title ?? '' }))
+  } catch (e) {
+    console.warn('Could not load generators from API, using mock data', e)
+  }
+})
+
 
 const page = ref(1)
 const activeTab = ref('All')
 
+
 //get all types
 const generatorTypes = computed(() => {
-  return ['All', ...new Set(generators.map((item) => item.type))]
+  return ['All', ...new Set(generators.value.map((item) => item.type))]
 })
 
 //filter by selected type
 const filterItems = computed(() => {
   console.log(activeTab)
   if (activeTab.value === 'All' || activeTab.value === undefined) {
-    return generators
+    return generators.value
   }
-  return generators.filter((i) => i.type == activeTab.value || i.type == '')
+  return generators.value.filter((i) => i.type == activeTab.value || i.type == '')
 })
 
 //reset page value when changing filter
 watch(filterItems, () => {
   page.value = 1
 })
+
 </script>
 
 <template>
@@ -56,13 +74,14 @@ watch(filterItems, () => {
           <template v-slot:default="{ items }">
             <v-row>
               <v-col v-for="item in items" cols="12" md="3" lg="4" v-bind:key="item.raw.name">
-                <generator-card
+
+                <CardModal
                   :name="item.raw.name"
                   :image="item.raw.image"
                   :title="item.raw.title"
                   :type="item.raw.type"
-                >
-                </generator-card>
+                />
+                
               </v-col>
             </v-row>
           </template>
