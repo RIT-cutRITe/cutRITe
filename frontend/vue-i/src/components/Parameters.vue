@@ -4,6 +4,9 @@ import { reactive } from 'vue'
 //<name> will likely be a prop? passed from homepage through
 import paramsJson from '@/data/params.json'
 import type { Param } from '@/types/Params'
+const props = defineProps<{
+  name: string
+}>()
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
