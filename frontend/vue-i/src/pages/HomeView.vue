@@ -7,7 +7,6 @@ import CardModal from '@/components/CardModal.vue'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
-// Start with mock data; replace with the backend's list once it loads.
 const generators = ref<Generator[]>([])
 
 onMounted(async () => {
