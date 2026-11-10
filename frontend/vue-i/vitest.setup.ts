@@ -22,3 +22,10 @@ afterEach(() => server.resetHandlers())
 // No server.close(): components fire fetches on mount that tests don't await. Closing in afterAll
 // lets those still-pending requests fall through to the real network (ECONNREFUSED). Each test
 // file runs in its own isolated module context, so the interceptor is discarded with it anyway.
+// jsdom has no visualViewport, which Vuetify overlays (v-dialog) read when positioning.
+vi.stubGlobal('visualViewport', {
+  width: 1024,
+  height: 768,
+  addEventListener() {},
+  removeEventListener() {},
+})
