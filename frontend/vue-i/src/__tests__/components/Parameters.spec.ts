@@ -13,6 +13,7 @@ beforeEach(() => {
   vi.spyOn(globalThis, 'fetch').mockResolvedValue({
     ok: true,
     json: async () => paramsJson,
+    text: async () => '<svg/>', // Parameters calls /generate after loading
   } as Response)
 })
 

@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import Parameters from '@/components/Parameters.vue';
 import SvgEditor from '@/components/svgEditor.vue';
 
+const svg_file = ref('')
 const props = defineProps<{
   name: string
 }>()
-console.log(props.name)
 </script>
 
 <template>
@@ -19,11 +20,11 @@ console.log(props.name)
      <v-row size="10" no-gutters>
       <v-col cols="3">
         <!-- <v-sheet class="pa-2">Parameters here</v-sheet> -->
-         <parameters :name="props.name"></parameters> <!--Parameter dropdowns-->
+         <parameters v-model="svg_file" :name="props.name"></parameters> <!--Parameter dropdowns-->
       </v-col>
       <v-col cols="7">
         <!-- <v-sheet class="pa-2" background="primary ">Editing here</v-sheet> -->
-        <svg-editor></svg-editor>
+        <svg-editor :svg="svg_file"></svg-editor>
       </v-col>
      </v-row>
   <!-- </v-container> -->
