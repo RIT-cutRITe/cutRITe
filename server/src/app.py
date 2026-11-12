@@ -41,12 +41,6 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:5173"],
-    allow_methods=["GET"],
-)
-
 # One logger to rule them all. Modules call logging.getLogger(__name__).
 logging.basicConfig(
     level=os.environ.get("LOG_LEVEL", "INFO").upper(),
