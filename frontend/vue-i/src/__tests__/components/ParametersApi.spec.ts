@@ -53,4 +53,34 @@ describe('Parameters API', () => {
     await flushPromises()
     expect(wrapper.findAll('.v-expansion-panel')).toHaveLength(0)
   })
+
+  it('emits update:advanced with the flipped value when the button is clicked', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }), text: async () => '<svg/>' }))
+    const wrapper = mount(Parameters, { props: { name: 'ABox' }, global: { stubs: {} } })
+    await flushPromises()
+    await wrapper.get('[data-testid="advanced-toggle"]').trigger('click')
+    expect(wrapper.emitted('update:advanced')).toEqual([[true]])
+
+    await wrapper.setProps({ advanced: true })
+    await wrapper.get('[data-testid="advanced-toggle"]').trigger('click')
+    expect(wrapper.emitted('update:advanced')![1]).toEqual([false])
+  })
+
+  it('refetches /getAllParams when the advanced prop changes', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }), text: async () => '<svg/>' })
+    vi.stubGlobal('fetch', fetchMock)
+    const wrapper = mount(Parameters, { props: { name: 'ABox' } })
+    await flushPromises()
+    await wrapper.setProps({ advanced: true })
+    await flushPromises()
+    const urls = fetchMock.mock.calls.map((c) => c[0] as string).filter((u) => u.includes('/getAllParams'))
+    expect(urls.at(-1)).toMatch(/advanced=true$/)
+  })
+
+  it('starts pressed when advanced is true', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }), text: async () => '<svg/>' }))
+    const wrapper = mount({ components: { VLayout, Parameters }, template: '<v-layout><Parameters name="ABox" :advanced="true" /></v-layout>' })
+    await flushPromises()
+    expect(wrapper.get('[data-testid="advanced-toggle"]').attributes('aria-pressed')).toBe('true')
+  })
 })

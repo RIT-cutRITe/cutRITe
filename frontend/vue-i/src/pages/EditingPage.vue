@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Parameters from '@/components/Parameters.vue';
 import SvgEditor from '@/components/svgEditor.vue';
 
@@ -8,6 +9,13 @@ const props = defineProps<{
   name: string
   advanced?: boolean
 }>()
+const route = useRoute()
+const router = useRouter()
+// The URL is the source of truth: the router maps ?advanced=true to the prop.
+// Keeps all other parameters, this allows the advanced query param to be set from the parameters.vue button.
+function setAdvanced(value: boolean) {
+  router.replace({ query: { ...route.query, advanced: String(value) } })
+}
 </script>
 
 <template>
@@ -21,7 +29,8 @@ const props = defineProps<{
      <v-row size="10" no-gutters>
       <v-col cols="3">
         <!-- <v-sheet class="pa-2">Parameters here</v-sheet> -->
-         <parameters v-model="svg_file" :name="props.name" :advanced="props.advanced"></parameters> <!--Parameter dropdowns-->
+        <!-- @update receives the emitted advanced update from parameters.vue -->
+         <parameters v-model="svg_file" @update:advanced="setAdvanced" :name="props.name" :advanced="props.advanced"></parameters> <!--Parameter dropdowns-->
       </v-col>
       <v-col cols="7">
         <!-- <v-sheet class="pa-2" background="primary ">Editing here</v-sheet> -->
