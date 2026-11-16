@@ -10,7 +10,27 @@ const props = defineProps<{
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 const sections = ref<Record<string, Param[]>>({})
-let values = reactive<Record<string, any>>({})
+
+// One reactive value per parameter, keyed by name and seeded from "default".
+// v-model on each input writes back into this object.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- holds strings (text/select) and booleans (checkbox)
+const values = reactive<Record<string, any>>({})
+const model = defineModel()
+
+async function generate() {
+  const response = await fetch(`${API_URL}/generate?name=${props.name}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(
+      values
+    )
+  })
+  if (!response.ok) {
+    console.error("generate failed", response.status, await response.text())
+    return
+  }
+  model.value = await response.text()
+}
 
 onMounted(async () => {
   try {
@@ -26,11 +46,8 @@ onMounted(async () => {
       values[p.name] = p.default
     }
   }
+  generate() // get the default svg for this box
 })
-
-// One reactive value per parameter, keyed by name and seeded from "default".
-// v-model on each input writes back into this object.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- holds strings (text/select) and booleans (checkbox)
 </script>
 
 <template>
@@ -40,7 +57,7 @@ onMounted(async () => {
       <v-expansion-panel v-for="(params, sectionName) in sections" :key="sectionName" :title="sectionName">
         <v-expansion-panel-text>
           <template v-for="p in params" :key="p.name">
-            <v-select
+            <v-select @change="generate"
               v-if="p.type === 'select'"
               v-model="values[p.name]"
               :label="p.name"
@@ -49,7 +66,7 @@ onMounted(async () => {
               persistent-hint
             />
 
-            <v-checkbox
+            <v-checkbox @change="generate"
               v-else-if="p.type === 'checkbox'"
               v-model="values[p.name]"
               :label="p.name"
@@ -58,7 +75,7 @@ onMounted(async () => {
             />
 
             <!-- "text" and any unknown type fall back to a text field -->
-            <v-text-field
+            <v-text-field @change="generate"
               v-else
               v-model="values[p.name]"
               :label="p.name"
