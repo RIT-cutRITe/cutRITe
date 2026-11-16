@@ -15,6 +15,7 @@ describe('Parameters API', () => {
       json: async () => ({
         data: { 'Settings for the Lid': [{ name: 'lid', type: 'text', default: 'x', options: null }] },
       }),
+      text: async () => '<svg/>',
     })
     vi.stubGlobal('fetch', fetchMock)
     const wrapper = mountParams()
@@ -28,7 +29,8 @@ describe('Parameters API', () => {
 
   it('renders no panels when the request fails', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }))
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500, text: async () => '' }))
     const wrapper = mountParams()
     await flushPromises()
     expect(wrapper.findAll('.v-expansion-panel')).toHaveLength(0)

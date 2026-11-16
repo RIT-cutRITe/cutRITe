@@ -8,7 +8,7 @@ afterEach(() => vi.unstubAllGlobals())
 
 describe('EditingPage', () => {
   it('composes the parameters panel and the SVG editor', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }) }))
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }), text: async () => '<svg/>' }))
     const wrapper = mount(EditingPage, { props: { name: 'ABox' } })
     await flushPromises()
     expect(wrapper.findComponent(Parameters).exists()).toBe(true)
@@ -16,7 +16,7 @@ describe('EditingPage', () => {
   })
 
   it('shows the generator name and passes it to Parameters', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }) }))
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }), text: async () => '<svg/>' }))
     const wrapper = mount(EditingPage, { props: { name: 'ABox' } })
     await flushPromises()
     expect(wrapper.find('h1').text()).toBe('ABox')

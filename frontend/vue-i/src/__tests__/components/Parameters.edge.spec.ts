@@ -6,6 +6,7 @@ async function mountWith(data: Record<string, unknown[]>) {
   vi.spyOn(globalThis, 'fetch').mockResolvedValue({
     ok: true,
     json: async () => ({ status: 'success', count: 0, data }),
+    text: async () => '<svg/>',
   } as Response)
   const { default: Parameters } = await import('../../components/Parameters.vue')
   const wrapper = mount(Parameters, { props: { name: 'ABox' } })

@@ -5,6 +5,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import type { Generator } from '@/types/Generator'
 import CardModal from '@/components/CardModal.vue'
 
+
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 const generators = ref<Generator[]>([])
@@ -19,7 +20,6 @@ onMounted(async () => {
     console.warn('Could not load generators from API, using mock data', e)
   }
 })
-
 
 const page = ref(1)
 const activeTab = ref('All')
