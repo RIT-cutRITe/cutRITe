@@ -3,9 +3,10 @@ import { onMounted, reactive, ref } from 'vue'
 //Will later be replaced with a get... getAllParams?name=<name>
 //<name> will likely be a prop? passed from homepage through
 import type { Param } from '@/types/Params'
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   name: string
-}>()
+  advanced?: boolean
+}>(), { advanced: false })
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
@@ -34,7 +35,7 @@ async function generate() {
 
 onMounted(async () => {
   try {
-    const res = await fetch(`${API_URL}/getAllParams?name=${props.name}`)
+    const res = await fetch(`${API_URL}/getAllParams?name=${props.name}&advanced=${props.advanced}`)
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const response = await res.json()
     sections.value = response.data

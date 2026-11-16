@@ -22,4 +22,14 @@ describe('EditingPage', () => {
     expect(wrapper.find('h1').text()).toBe('ABox')
     expect(wrapper.findComponent(Parameters).props('name')).toBe('ABox')
   })
+
+  it('passes advanced to Parameters, defaulting to false', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }), text: async () => '<svg/>' }))
+    const wrapper = mount(EditingPage, { props: { name: 'ABox' } })
+    await flushPromises()
+    expect(wrapper.findComponent(Parameters).props('advanced')).toBe(false)
+
+    await wrapper.setProps({ advanced: true })
+    expect(wrapper.findComponent(Parameters).props('advanced')).toBe(true)
+  })
 })

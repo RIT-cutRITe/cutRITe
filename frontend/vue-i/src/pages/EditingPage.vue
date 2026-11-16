@@ -6,6 +6,7 @@ import SvgEditor from '@/components/svgEditor.vue';
 const svg_file = ref('')
 const props = defineProps<{
   name: string
+  advanced?: boolean
 }>()
 </script>
 
@@ -20,7 +21,7 @@ const props = defineProps<{
      <v-row size="10" no-gutters>
       <v-col cols="3">
         <!-- <v-sheet class="pa-2">Parameters here</v-sheet> -->
-         <parameters v-model="svg_file" :name="props.name"></parameters> <!--Parameter dropdowns-->
+         <parameters v-model="svg_file" :name="props.name" :advanced="props.advanced"></parameters> <!--Parameter dropdowns-->
       </v-col>
       <v-col cols="7">
         <!-- <v-sheet class="pa-2" background="primary ">Editing here</v-sheet> -->
