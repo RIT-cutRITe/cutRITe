@@ -2,6 +2,7 @@
 
 Proxies the Boxes.py web app and exposes its generators and their parameters as JSON.
 """
+
 import logging
 import os
 from collections.abc import AsyncGenerator
@@ -10,10 +11,11 @@ from typing import Annotated
 
 import requests
 from bs4 import BeautifulSoup
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 
-from src.scraper import menu_search, retrieve_parameters
-from src.types import Generator, ParametersResponse
+from src.scraper import menu_search, retrieve_description, retrieve_parameters
+from src.types import Description, Generator, ParametersResponse
 
 # Base URL of the Boxes.py service.
 URL = "http://boxes:8000"
@@ -29,7 +31,14 @@ app = FastAPI(
     title="cutRITe Boxes API",
     description="API for retrieving Boxes.py generators and parameters.",
     version="1.0.0",
-    lifespan=lifespan)
+    lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080", "http://localhost:5173"],
+    allow_methods=["GET", "POST"],
+)
 
 # One logger to rule them all. Modules call logging.getLogger(__name__).
 logging.basicConfig(
@@ -48,7 +57,8 @@ async def root() -> dict:
     response_model=dict[str, Generator],
     tags=["Generators"],
     summary="Get all box generators",
-    description="Retrieves all available generators from Boxes.py. Results are cached.")
+    description="Retrieves all available generators from Boxes.py. Results are cached.",
+)
 async def get_all(request: Request) -> dict:
     """Scrape the Boxes.py menu page for all generators, caching them in app state."""
     if len(request.app.state.itemsDict) == 0:
@@ -68,10 +78,12 @@ async def get_all(request: Request) -> dict:
     summary="Get generator parameters",
     description="Retrieves available parameters for a specified Boxes.py generator.")
 async def get_all_params(request: Request,
-    name: Annotated[str, Query(
-        ...,
-        description="The generator identifier returned by /getAll",
-        examples=["ABox"]
+    name: Annotated[
+        str,
+        Query(
+            ...,
+            description="The generator identifier returned by /getAll",
+            examples=["ABox"]
     )],
     advanced: Annotated[bool, Query(
         description="Flag for if we are including advanced parameters in response, defaults to 'False'",
@@ -98,5 +110,73 @@ async def get_all_params(request: Request,
     return {
         "status": "success",
         "count": sum(len(parameters) for parameters in data.values()),
-        "data": data
+        "data": data,
     }
+
+
+@app.get(
+    "/getDescription",
+    response_model=Description,
+    tags=["Generators"],
+    summary="Get generator description",
+    description="Retrieves the name, description and images of a specified Boxes.py generator.")
+async def get_description(request: Request,
+    name: Annotated[str, Query(
+        ...,
+        description="The generator identifier returned by /getAll",
+        examples=["ABox"]
+    )]) -> dict:
+    """Scrape one generator's page and return its name, description and images.
+
+    Raises:
+        HTTPException: 400 if ``name`` was not returned by ``/getAll``.
+    """
+    if name not in request.app.state.itemsDict:
+        raise HTTPException(status_code=400, detail=f"Generator {name} does not exist")
+
+    response = requests.get(URL + "/" + name, timeout=10)
+    response.raise_for_status()
+
+    return retrieve_description(BeautifulSoup(response.text, "html.parser"))
+
+
+@app.get(
+    "/getImage",
+    # response_model=Response,
+    tags=["Generators"],
+    summary="Get generator image from path",
+    description="Retrieves image for a specified Boxes.py image link.",
+)
+async def get_image(
+    request: Request,
+    path: Annotated[
+        str, Query(..., description="The image returned by /getAll", examples=["ABox"])
+    ],
+) -> Response:
+    """."""
+    result = requests.get(URL + path)
+    if result.status_code > 300:
+        raise HTTPException(result.status_code, detail="Image not found: " + path)
+    return Response(result.content, media_type="image/jpeg")
+
+
+@app.post(
+    "/generate",
+    tags=["Generators"],
+    summary="Get generator svg",
+    description="Retrieves svg for a specified Boxes.py generator and parameters.",
+)
+async def generate(
+    request: Request,
+    name: Annotated[
+        str,
+        Query(..., description="The generator identifier returned by /getAll", examples=["ABox"]),
+    ],
+    parameters: dict[str, str | bool],
+) -> Response:
+    """Render the generator's SVG from a flat ``{param_name: value}`` JSON body."""
+    # render=1 makes Boxes.py return the SVG instead of the settings form
+    result = requests.get(f"{URL}/{name}", params={**parameters, "render": 1}, timeout=10)
+    if result.status_code >= 300:
+        raise HTTPException(result.status_code, detail="Generation failed: " + name)
+    return Response(result.content, media_type="image/svg+xml")

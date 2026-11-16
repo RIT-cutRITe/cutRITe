@@ -1,7 +1,7 @@
 import GeneratorCard from '@/components/GeneratorCard.vue'
 import HomeView from '@/pages/HomeView.vue'
-import { mount } from '@vue/test-utils'
-import { expect, test } from 'vitest'
+import { flushPromises, mount as vtuMount } from '@vue/test-utils'
+import { beforeEach, expect, test, vi } from 'vitest'
 import generators from '@/data/generators'
 
 import { createVuetify } from 'vuetify'
@@ -9,8 +9,23 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 const vuetify = createVuetify({ components, directives })
 
+// HomeView only fills from the API, so serve the mock generators through fetch.
+beforeEach(() => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+    ok: true,
+    json: async () => Object.fromEntries(generators.map((g) => [g.name, g])),
+  } as Response)
+})
+
+// Mount and wait for the generators to load.
+async function mount(...args: Parameters<typeof vtuMount>) {
+  const wrapper = vtuMount(...args)
+  await flushPromises()
+  return wrapper
+}
+
 test('Testing Box Filtering for Homepage', async () => {
-  const screen = mount(HomeView, { global: { plugins: [vuetify] } })
+  const screen = await mount(HomeView, { global: { plugins: [vuetify] } })
   expect(screen.html()).toContain('Generators')
 
   //Click on the misc filter
@@ -27,7 +42,7 @@ test('Testing Box Filtering for Homepage', async () => {
 })
 
 test('Testing Box Type Filtering for Homepage', async () => {
-  const screen = mount(HomeView, { global: { plugins: [vuetify] } })
+  const screen = await mount(HomeView, { global: { plugins: [vuetify] } })
   expect(screen.html()).toContain('Generators')
 
   //Click on the Box filter
@@ -44,7 +59,7 @@ test('Testing Box Type Filtering for Homepage', async () => {
 })
 
 test('Test Pagination (clicking on one page changes generators)', async () => {
-  const screen = mount(HomeView, { global: { plugins: [vuetify] } })
+  const screen = await mount(HomeView, { global: { plugins: [vuetify] } })
 
   //Get generators from 1st page
   const allCards = screen.findAllComponents(GeneratorCard)
@@ -64,14 +79,14 @@ test('Test Pagination (clicking on one page changes generators)', async () => {
   expect(fistPagegeneratorsNames).not.toEqual(secondPageGeneratoreNames)
 })
 
-test('Homepage renders Generators heading', () => {
-  const screen = mount(HomeView, { global: { plugins: [vuetify] } })
+test('Homepage renders Generators heading', async () => {
+  const screen = await mount(HomeView, { global: { plugins: [vuetify] } })
 
   expect(screen.text()).toContain('Generators')
 })
 
 test('Changing filter resets pagination to page 1', async () => {
-  const screen = mount(HomeView, { global: { plugins: [vuetify] } })
+  const screen = await mount(HomeView, { global: { plugins: [vuetify] } })
 
   // Check that there are enough Generators for multiple pages
   if (generators.length <= 8) return
