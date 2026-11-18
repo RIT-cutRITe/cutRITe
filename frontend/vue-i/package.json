@@ -32,7 +32,7 @@
     "@vitejs/plugin-vue-jsx": "^5.1.6",
     "@vitest/coverage-v8": "4.1.12",
     "@vue/eslint-config-typescript": "14.9.0",
-    "@vue/test-utils": "^2.5.0",
+    "@vue/test-utils": "^2.6.0",
     "@vue/tsconfig": "^0.9.1",
     "cypress": "^16.2.1",
     "eslint": "10.14.0",
