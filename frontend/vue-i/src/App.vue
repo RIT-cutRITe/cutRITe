@@ -4,7 +4,7 @@ import NavBar from '@/components/NavBar.vue'
 
 <template>
   <v-app>
-    <NavBar />
+    <NavBar class="d-print-none" />
     <v-main>
       <v-container>
         <main>

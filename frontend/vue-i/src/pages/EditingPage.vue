@@ -10,7 +10,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div>
+    <div class="d-print-none">
       <!-- The current route is accessible as $route in the template -->
       <h1>{{ props.name }}</h1>
     </div>
@@ -18,11 +18,11 @@ const props = defineProps<{
     <!-- <h1 class="text-h4 mb-4">Editing</h1> -->
     <!-- TODO: editing tools and preview go here -->
      <v-row size="10" no-gutters>
-      <v-col cols="3">
+      <v-col cols="3" class="d-print-none">
         <!-- <v-sheet class="pa-2">Parameters here</v-sheet> -->
          <parameters v-model="svg_file" :name="props.name"></parameters> <!--Parameter dropdowns-->
       </v-col>
-      <v-col cols="7">
+      <v-col cols="7" class="print-full">
         <!-- <v-sheet class="pa-2" background="primary ">Editing here</v-sheet> -->
         <svg-editor :svg="svg_file"></svg-editor>
       </v-col>
@@ -31,4 +31,17 @@ const props = defineProps<{
 </template>
 
 <style scoped></style>
+
+<!-- Not scoped so it reaches Vuetify's layout -->
+<style>
+@media print {
+  .print-full {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  .v-container {
+    padding: 0 !important;
+  }
+}
+</style>
    
