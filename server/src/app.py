@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.globber import glob_params, load_patterns
 from src.scraper import menu_search, retrieve_description, retrieve_parameters
 from src.types import Description, Generator, ParametersResponse
 
@@ -107,11 +108,15 @@ async def get_all_params(request: Request,
 
     data = retrieve_parameters(soup)
 
-    return {
+    result = {
         "status": "success",
         "count": sum(len(parameters) for parameters in data.values()),
         "data": data,
     }
+    if advanced:
+        return result
+    # Extra CPU time on every request but means we don't have a stale cache type issue. Maybe worth?
+    return glob_params(result, name, load_patterns())
 
 
 @app.get(

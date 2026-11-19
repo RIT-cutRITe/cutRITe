@@ -100,6 +100,19 @@ def test_get_all_params(client: TestClient) -> None:
     assert body["data"]["Box"][0]["name"] == "x"
 
 
+def test_get_all_params_hides_advanced(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Check that params matching advanced_parameters only appear with advanced=true."""
+    monkeypatch.setattr("src.app.load_patterns", lambda: ["ABox/Box/x"])
+    client.get("/getAll")
+    hidden = client.get("/getAllParams", params={"name": "ABox"}).json()
+    assert hidden["count"] == 0
+    assert hidden["data"] == {}
+    shown = client.get("/getAllParams", params={"name": "ABox", "advanced": True}).json()
+    assert shown["data"]["Box"][0]["name"] == "x"
+
+
 def test_get_all_params_unknown_generator(client: TestClient) -> None:
     """Check that /getAllParams rejects an unknown generator with a 400."""
     response = client.get("/getAllParams", params={"name": "Nope"})
