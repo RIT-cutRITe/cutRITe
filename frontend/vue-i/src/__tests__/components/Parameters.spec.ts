@@ -6,7 +6,11 @@ import paramsJson from '../../data/params.json'
 
 type Param = { name: string; type: string; default: string | boolean; options: string[] | null }
 const sections = paramsJson.data as Record<string, Param[]>
-const allParams = Object.values(sections).flat()
+// The "format" setting is shown as the export menu, not as an input.
+const allParams = Object.values(sections)
+  .flat()
+  .filter((p) => p.name !== 'format')
+const formats = Object.values(sections).flat().find((p) => p.name === 'format')?.options ?? []
 
 // Parameters now loads its sections from the API; serve params.json instead.
 beforeEach(() => {
@@ -100,6 +104,49 @@ describe('Parameters', () => {
     const before = box.element.checked
     await box.setValue(!before)
     expect(box.element.checked).toBe(!before)
+    wrapper.unmount()
+  })
+
+  it('does not show the format setting as an input', async () => {
+    const wrapper = await mountOpen()
+    expect(wrapper.findAll('label').map((l) => l.text())).not.toContain('format')
+    wrapper.unmount()
+  })
+
+  it('lists the formats from the format setting in the export menu', async () => {
+    const wrapper = await mountOpen()
+    await wrapper.find('.v-btn').trigger('click')
+    await flushPromises()
+    const items = [...document.body.querySelectorAll('.v-list-item')].map((i) => i.textContent)
+    expect(items).toEqual(formats)
+    wrapper.unmount()
+  })
+
+  it('posts the settings to /export and downloads the chosen format', async () => {
+    const wrapper = await mountOpen()
+    const fetchMock = vi.mocked(globalThis.fetch)
+    fetchMock.mockResolvedValue({ ok: true, blob: async () => new Blob(['dxf']) } as Response)
+    // jsdom can't create object URLs or follow downloads.
+    URL.createObjectURL = vi.fn(() => 'blob:fake')
+    URL.revokeObjectURL = vi.fn()
+    let downloadName = ''
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
+      downloadName = this.download
+    })
+
+    await wrapper.find('.v-btn').trigger('click')
+    await flushPromises()
+    const dxf = [...document.body.querySelectorAll<HTMLElement>('.v-list-item')].find(
+      (i) => i.textContent === 'dxf',
+    )!
+    dxf.click()
+    await flushPromises()
+
+    const [url, init] = fetchMock.mock.calls.at(-1)!
+    expect(url).toContain('/export?name=ABox&format=dxf')
+    expect(init?.method).toBe('POST')
+    expect(JSON.parse(init?.body as string)).toHaveProperty('thickness')
+    expect(downloadName).toBe('ABox.dxf')
     wrapper.unmount()
   })
 })

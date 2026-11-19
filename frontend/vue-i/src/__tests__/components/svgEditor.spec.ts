@@ -18,4 +18,15 @@ describe('svgEditor', () => {
     const wrapper = mount(SvgEditor, { props: { svg: '' } })
     expect(wrapper.find('.image-viewport svg').exists()).toBe(false)
   })
+
+  it('sets the print page size to the svg size in mm', () => {
+    const svg = '<svg height="335.30mm" viewBox="0 0 221.9 335.3" width="221.90mm"></svg>'
+    const wrapper = mount(SvgEditor, { props: { svg } })
+    expect(wrapper.find('style').text()).toContain('size: 221.90mm 335.30mm')
+  })
+
+  it('uses an automatic print page size when there is no svg', () => {
+    const wrapper = mount(SvgEditor, { props: { svg: '' } })
+    expect(wrapper.find('style').text()).toContain('size: auto')
+  })
 })
