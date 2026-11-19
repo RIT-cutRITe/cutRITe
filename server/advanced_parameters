@@ -1,2 +1,2 @@
 # Advanced parameters. .gitignore-like syntax, paths are <generator>/<section>/<param>. See src/globber.py.
-*/default_settings
+*/Default Settings

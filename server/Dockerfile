@@ -15,6 +15,8 @@ ENV PATH="/.venv/bin:$PATH"
 
 # Copy the source code into the container.
 COPY src/*.py src/
+# Patterns for parameters hidden unless ?advanced=true; globber.py reads it from /app.
+COPY advanced_parameters ./
 
 # install uv
 RUN pip install uv
