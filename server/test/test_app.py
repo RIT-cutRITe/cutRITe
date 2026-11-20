@@ -59,12 +59,16 @@ class FakeResponse:
 def client(monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
     """Return a client whose upstream Boxes.py requests serve canned HTML."""
 
-    def fake_get(url: str, timeout: int | None = None) -> FakeResponse:
+    def fake_get(
+        url: str, params: dict | None = None, timeout: int | None = None
+    ) -> FakeResponse:
         """Return the menu, an image, or the parameters page depending on the URL."""
         if url.endswith("missing.png"):
             return FakeResponse(status_code=404)
         if url.endswith(".png"):
             return FakeResponse(content=b"fake-image")
+        if params and "format" in params:
+            return FakeResponse(content=f"exported-{params['format']}".encode())
         return FakeResponse(MENU_HTML if url.endswith("/Menu") else PARAMS_HTML)
 
     monkeypatch.setattr(requests, "get", fake_get)
@@ -152,3 +156,15 @@ def test_get_image_not_found(client: TestClient) -> None:
 def test_get_image_missing_path(client: TestClient) -> None:
     """Check that /getImage requires the path query parameter."""
     assert client.get("/getImage").status_code == 422
+
+
+def test_export(client: TestClient) -> None:
+    """Check that /export returns the file Boxes.py rendered in the requested format."""
+    response = client.post("/export", params={"name": "ABox", "format": "dxf"}, json={"x": "10"})
+    assert response.status_code == 200
+    assert response.content == b"exported-dxf"
+
+
+def test_export_missing_format(client: TestClient) -> None:
+    """Check that /export requires the format query parameter."""
+    assert client.post("/export", params={"name": "ABox"}, json={}).status_code == 422

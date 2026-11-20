@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 //Will later be replaced with a get... getAllParams?name=<name>
 //<name> will likely be a prop? passed from homepage through
 import type { Param } from '@/types/Params'
@@ -33,6 +33,29 @@ async function generate() {
     return
   }
   model.value = await response.text()
+}
+
+// The export menu replaces the "format" setting Boxes.py provides.
+const exportFormats = computed(
+  () => Object.values(sections.value).flat().find((p) => p.name === 'format')?.options ?? [],
+)
+
+async function exportFile(format: string) {
+  const response = await fetch(`${API_URL}/export?name=${props.name}&format=${format}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(values),
+  })
+  if (!response.ok) {
+    console.error('export failed', response.status, await response.text())
+    return
+  }
+  const url = URL.createObjectURL(await response.blob())
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `${props.name}.${format.split('_')[0]}`
+  link.click()
+  URL.revokeObjectURL(url)
 }
 
 async function loadParams() {
@@ -75,10 +98,25 @@ watch(() => props.advanced, loadParams)
         Advanced
       </v-btn>
     </div>
+    <v-menu v-if="exportFormats.length">
+      <template #activator="{ props: menuProps }">
+        <v-btn v-bind="menuProps" data-testid="export-button" color="primary" prepend-icon="mdi-download" class="mb-2">
+          Export
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="format in exportFormats"
+          :key="format"
+          :title="format"
+          @click="exportFile(format)"
+        />
+      </v-list>
+    </v-menu>
     <v-expansion-panels multiple>
       <v-expansion-panel v-for="(params, sectionName) in sections" :key="sectionName" :title="sectionName">
         <v-expansion-panel-text>
-          <template v-for="p in params" :key="p.name">
+          <template v-for="p in params.filter((p) => p.name !== 'format')" :key="p.name">
             <v-select @change="generate"
               v-if="p.type === 'select'"
               v-model="values[p.name]"

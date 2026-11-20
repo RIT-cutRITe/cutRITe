@@ -185,3 +185,30 @@ async def generate(
     if result.status_code >= 300:
         raise HTTPException(result.status_code, detail="Generation failed: " + name)
     return Response(result.content, media_type="image/svg+xml")
+
+
+@app.post(
+    "/export",
+    tags=["Generators"],
+    summary="Export generator file",
+    description="Retrieves a file in the given format for a Boxes.py generator and parameters.",
+)
+async def export(
+    request: Request,
+    name: Annotated[
+        str,
+        Query(..., description="The generator identifier returned by /getAll", examples=["ABox"]),
+    ],
+    file_format: Annotated[
+        str,
+        Query(..., alias="format", description="A format of the generator", examples=["dxf"]),
+    ],
+    parameters: dict[str, str | bool],
+) -> Response:
+    """Render the generator in ``file_format`` from a flat ``{param_name: value}`` JSON body."""
+    result = requests.get(
+        f"{URL}/{name}", params={**parameters, "format": file_format, "render": 1}, timeout=10
+    )
+    if result.status_code >= 300:
+        raise HTTPException(result.status_code, detail="Export failed: " + name)
+    return Response(result.content, media_type="application/octet-stream")
