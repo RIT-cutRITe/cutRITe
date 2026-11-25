@@ -15,7 +15,7 @@ authors = [
 dependencies = [
   "fastapi==0.162.2",
   "uvicorn==0.54.0",
-  "pydantic==2.14.3",
+  "pydantic==2.14.4",
   "ty>=0.0.92",
   "requests>=2.34.2",
   "beautifulsoup4>=4.15.0",
